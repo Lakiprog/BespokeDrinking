@@ -29,27 +29,32 @@ public class Restaurant {
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public String getCity() {
 		return city;
 	}
+	
 	public void setCity(String city) {
 		this.city = city;
 	}
+	
 	public List<Drink> getDrinks() {
 		return drinks;
 	}
+	
 	public void setDrinks(List<Drink> drinks) {
 		this.drinks = drinks;
 	}
+	
 	public Integer getId() {
 		return id;
 	}
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	
 }

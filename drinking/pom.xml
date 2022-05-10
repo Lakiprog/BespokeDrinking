@@ -50,27 +50,22 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+		    <groupId>org.drools</groupId>
+		    <artifactId>drools-core</artifactId>
+		    <version>6.5.0.Final</version>
 		</dependency>
 		
 		<dependency>
-            <groupId>org.kie</groupId>
-            <artifactId>kie-ci</artifactId>
-            <version>6.0.0.Final</version>
-        </dependency>
+		    <groupId>org.drools</groupId>
+		    <artifactId>drools-compiler</artifactId>
+		    <version>6.5.0.Final</version>
+		</dependency>
 		
 		<dependency>
-	        <groupId>org.drools</groupId>
-	        <artifactId>drools-templates</artifactId>
-	        <version>6.0.0.Final</version>
-	    </dependency>
-	
-		<dependency>
-	         <groupId>org.drools</groupId>
-	         <artifactId>knowledge-internal-api</artifactId>
-	         <version>6.5.0.Final</version>
-	    </dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-ci</artifactId>
+			<version>7.10.0.Final</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
