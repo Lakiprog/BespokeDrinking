@@ -1,0 +1,28 @@
+package drools.spring.rules;
+
+rule "Question: Do you like hot or cold drinks? Answer: hot"
+    when
+        $user: User();
+        $preference = $user.getPreference();
+        $question from $user.getAnsweredQuestions().get($user.getAnsweredQuestions().getSize() - 1)(text = "Do you like hot or cold drinks?");
+        $answer: $question.getSelectedAnswer()(answerNumber == 0);
+    then
+    	System.out.println("User likes it hot");
+        $preference.setHot(true);
+        update($user);
+end
+
+rule "Question: Do you like hot or cold drinks? Answer: cold"
+    when
+        $user: User();
+        $preference = $user.getPreference();
+        $question from $user.getAnsweredQuestions().get($user.getAnsweredQuestions().getSize() - 1)(text = "Do you like hot or cold drinks?");
+        $answer: $question.getSelectedAnswer()(answerNumber == 1);
+    then
+    	System.out.println("User likes it cold");
+        $preference.setHot(false);
+        update($user);
+end
+
+
+

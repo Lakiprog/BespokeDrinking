@@ -22,7 +22,7 @@ public class Preference {
     @CollectionTable(name="preference_textures", joinColumns=@JoinColumn(name="preference_id"))
 	private Map<Texture, Double> texture;
 	
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.LAZY)
     @CollectionTable(name = "preference_allergies", joinColumns = @JoinColumn(name = "preference_id"))
     @Column(name = "allergy")
 	private List<String> allergies;

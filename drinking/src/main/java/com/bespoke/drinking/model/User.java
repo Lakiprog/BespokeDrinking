@@ -18,7 +18,9 @@ public class User {
 	@OneToOne
 	private Preference preference;
 	
-	@Transient
+	@ElementCollection(fetch=FetchType.EAGER)
+    @Column(name="answered_questions")
+    @CollectionTable(name="user_answeredQuestions", joinColumns=@JoinColumn(name="user_id"))
 	private List<Question> answeredQuestions;
 
 	public String getUsername() {
