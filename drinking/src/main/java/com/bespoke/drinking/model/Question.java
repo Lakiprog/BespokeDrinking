@@ -21,15 +21,18 @@ public class Question {
 	private Integer id;
 	
 	@Column
-	String text;
+	private boolean processed;
+	
+	@Column
+	private String text;
 	
 	@ElementCollection(fetch=FetchType.EAGER)
     @Column(name="answers")
     @CollectionTable(name="question_answers", joinColumns=@JoinColumn(name="question_id"))
-	List<Answer> answers;
+	private List<Answer> answers;
 	
 	@OneToOne
-	Answer selectedAnswer;
+	private Answer selectedAnswer;
 	
 	public String getText() {
 		return text;
@@ -61,6 +64,14 @@ public class Question {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public boolean isProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
 	}
 	
 	

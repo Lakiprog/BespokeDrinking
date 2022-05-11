@@ -7,16 +7,19 @@ import com.bespoke.drinking.model.Preference;
 
 import java.util.List
 
+//  Do you like hot or cold drinks?
+
 rule "Question: Do you like hot or cold drinks? Answer: hot"
     when
         $user: User();
         User($preference: preference, eval($preference.getHot() == null));
         User($answeredQuestions: answeredQuestions);
-        question: Question(text == "Do you like hot or cold drinks?") from $answeredQuestions;
-        answer: Answer(answerNumber == 0) from question.getSelectedAnswer();
+        $question: Question(text == "Do you like hot or cold drinks?", processed == false) from $answeredQuestions;
+        answer: Answer(answerNumber == 0) from $question.getSelectedAnswer();
     then
     	System.out.println("User likes it hot");
         $preference.setHot(true);
+        $question.setProcessed(true);
         update($user);
 end
 
@@ -25,10 +28,48 @@ rule "Question: Do you like hot or cold drinks? Answer: cold"
         $user: User();
         User($preference: preference, eval($preference.getHot() == null));
         User($answeredQuestions: answeredQuestions);
-        question: Question(text == "Do you like hot or cold drinks?") from $answeredQuestions;
-        answer: Answer(answerNumber == 1) from question.getSelectedAnswer();
+        $question: Question(text == "Do you like hot or cold drinks?", processed == false) from $answeredQuestions;
+        answer: Answer(answerNumber == 1) from $question.getSelectedAnswer();
     then
     	System.out.println("User likes it cold");
         $preference.setHot(false);
+        $question.setProcessed(true);
         update($user);
 end
+
+
+
+//  Do you drink coffee or tea more?
+
+rule "Question: Do you drink coffee or tea more? Answer: coffee"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot() != null), eval($preference.getHot()));
+        User($answeredQuestions: answeredQuestions);
+        $question: Question(text == "Do you drink coffee or tea more?", processed == false) from $answeredQuestions;
+        answer: Answer(answerNumber == 0) from $question.getSelectedAnswer();
+    then
+    	System.out.println("User likes coffee");
+        //$preference.setHot(true);
+        $question.setProcessed(true);
+        update($user);
+end
+
+rule "Question: Do you drink coffee or tea more? Answer: tea"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot() != null), eval($preference.getHot()));
+        User($answeredQuestions: answeredQuestions);
+        $question: Question(text == "Do you drink coffee or tea more?", processed == false) from $answeredQuestions;
+        answer: Answer(answerNumber == 1) from $question.getSelectedAnswer();
+    then
+    	System.out.println("User likes tea");
+        //$preference.setHot(false);
+        $question.setProcessed(true);
+        update($user);
+end
+
+
+
+// How do you drink your coffee
+
