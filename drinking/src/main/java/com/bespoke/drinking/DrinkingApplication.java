@@ -61,9 +61,6 @@ public class DrinkingApplication {
 		questions.add(q);
 		user.setAnsweredQuestions(questions);
 		
-		kSession.insert(user);
-		int fired = kSession.fireAllRules();
-		
 		Question q2 = new Question();
 		q2.setId(2);
 		q2.setText("Do you drink coffee or tea more?");
@@ -71,14 +68,14 @@ public class DrinkingApplication {
 		ArrayList<Answer> answers2 = new ArrayList<>();
 		
 		Answer coffee = new Answer();
-		hot.setId(3);
-		hot.setText("Coffee");
-		hot.setAnswerNumber(0);
+		coffee.setId(3);
+		coffee.setText("Coffee");
+		coffee.setAnswerNumber(0);
 		
 		Answer tea = new Answer();
-		cold.setId(4);
-		cold.setText("Tea");
-		cold.setAnswerNumber(1);
+		tea.setId(4);
+		tea.setText("Tea");
+		tea.setAnswerNumber(1);
 		
 		answers2.add(coffee);
 		answers2.add(tea);
@@ -90,7 +87,7 @@ public class DrinkingApplication {
 		user.setAnsweredQuestions(questions);
 		
 		kSession.insert(user);
-		fired += kSession.fireAllRules();
+		int fired = kSession.fireAllRules();
 		
 		System.out.println("Number of Rules executed = " + fired);
 		System.out.println("Preference (Is hot?): " + p.getHot());
