@@ -14,7 +14,7 @@ public class Preference {
 	private Integer id;
 	
 	@Column
-	private boolean alcoholic, hot, caffeine;
+	private Boolean alcoholic, hot, caffeine;
 	
 	@ElementCollection(fetch=FetchType.EAGER)
     @MapKeyColumn(name="texture")
@@ -36,30 +36,30 @@ public class Preference {
 	@OneToOne
 	private User user;
 	
-	public boolean isAlcoholic() {
+	public Boolean getAlcoholic() {
 		return alcoholic;
 	}
-	
-	public void setAlcoholic(boolean alcoholic) {
+
+	public void setAlcoholic(Boolean alcoholic) {
 		this.alcoholic = alcoholic;
 	}
-	
-	public boolean isHot() {
+
+	public Boolean getHot() {
 		return hot;
 	}
-	
-	public void setHot(boolean hot) {
+
+	public void setHot(Boolean hot) {
 		this.hot = hot;
 	}
-	
-	public boolean isCaffeine() {
+
+	public Boolean getCaffeine() {
 		return caffeine;
 	}
-	
-	public void setCaffeine(boolean caffeine) {
+
+	public void setCaffeine(Boolean caffeine) {
 		this.caffeine = caffeine;
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}

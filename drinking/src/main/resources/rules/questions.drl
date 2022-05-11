@@ -1,0 +1,34 @@
+package rules;
+
+import com.bespoke.drinking.model.User;
+import com.bespoke.drinking.model.Question;
+import com.bespoke.drinking.model.Answer;
+import com.bespoke.drinking.model.Preference;
+
+import java.util.List
+
+rule "Question: Do you like hot or cold drinks? Answer: hot"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot() == null));
+        User($answeredQuestions: answeredQuestions);
+        question: Question(text == "Do you like hot or cold drinks?") from $answeredQuestions;
+        answer: Answer(answerNumber == 0) from question.getSelectedAnswer();
+    then
+    	System.out.println("User likes it hot");
+        $preference.setHot(true);
+        update($user);
+end
+
+rule "Question: Do you like hot or cold drinks? Answer: cold"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot() == null));
+        User($answeredQuestions: answeredQuestions);
+        question: Question(text == "Do you like hot or cold drinks?") from $answeredQuestions;
+        answer: Answer(answerNumber == 1) from question.getSelectedAnswer();
+    then
+    	System.out.println("User likes it cold");
+        $preference.setHot(false);
+        update($user);
+end

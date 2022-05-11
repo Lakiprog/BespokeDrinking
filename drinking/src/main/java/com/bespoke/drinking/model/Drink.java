@@ -29,7 +29,7 @@ public class Drink {
 	private String name;
 	
 	@Column
-	private boolean alcoholic, hot, caffeine;
+	private Boolean alcoholic, hot, caffeine;
 	
 	@Column
 	private Texture texture;
@@ -64,22 +64,30 @@ public class Drink {
 		this.alcoholic = alcoholic;
 	}
 	
-	public boolean isHot() {
+	public Boolean getAlcoholic() {
+		return alcoholic;
+	}
+
+	public void setAlcoholic(Boolean alcoholic) {
+		this.alcoholic = alcoholic;
+	}
+
+	public Boolean getHot() {
 		return hot;
 	}
-	
-	public void setHot(boolean hot) {
+
+	public void setHot(Boolean hot) {
 		this.hot = hot;
 	}
-	
-	public boolean isCaffeine() {
+
+	public Boolean getCaffeine() {
 		return caffeine;
 	}
-	
-	public void setCaffeine(boolean caffeine) {
+
+	public void setCaffeine(Boolean caffeine) {
 		this.caffeine = caffeine;
 	}
-	
+
 	public Texture getTexture() {
 		return texture;
 	}

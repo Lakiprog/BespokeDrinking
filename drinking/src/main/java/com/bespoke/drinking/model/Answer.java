@@ -16,7 +16,7 @@ public class Answer {
 	private String text;
 	
 	@Column
-	private int answerNumber;
+	private Integer answerNumber;
 	
 	public String getText() {
 		return text;
@@ -26,11 +26,11 @@ public class Answer {
 		this.text = text;
 	}
 	
-	public int getAnswerNumber() {
+	public Integer getAnswerNumber() {
 		return answerNumber;
 	}
 	
-	public void setAnswerNumber(int answerNumber) {
+	public void setAnswerNumber(Integer answerNumber) {
 		this.answerNumber = answerNumber;
 	}
 

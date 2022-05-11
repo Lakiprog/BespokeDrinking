@@ -31,7 +31,7 @@ public class DrinkingApplication {
 		user.setUsername("markuza2");
 		
 		Preference p = new Preference();
-		p.setHot(false);
+		p.setHot(null);
 		user.setPreference(p);
 		
 		ArrayList<Question> questions = new ArrayList<>();
@@ -59,9 +59,12 @@ public class DrinkingApplication {
 		q.setSelectedAnswer(hot);
 		
 		questions.add(q);
+		user.setAnsweredQuestions(questions);
 		
 		kSession.insert(user);
 		int fired = kSession.fireAllRules();
 		
+		System.out.println("Number of Rules executed = " + fired);
+		System.out.println("Preference (Is hot?): " + p.getHot());
 	}
 }
