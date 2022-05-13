@@ -56,14 +56,6 @@ public class Drink {
 		this.name = name;
 	}
 	
-	public boolean isAlcoholic() {
-		return alcoholic;
-	}
-	
-	public void setAlcoholic(boolean alcoholic) {
-		this.alcoholic = alcoholic;
-	}
-	
 	public Boolean getAlcoholic() {
 		return alcoholic;
 	}
