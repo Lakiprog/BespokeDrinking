@@ -4,8 +4,10 @@ import com.bespoke.drinking.model.*;
 
 import java.util.*;
 
-query "Best Drinks" (Preference $preference, String $city)
-	$drinks: List(size > 0) from collect(Drink());
+global List bestDrinks;
+
+query getBestDrinks(Preference $preference, String $city, List $result)
+	$drinks: List();
 	$filter: List(size > 0) from accumulate(
 		Drink($d: this, 
 			alcoholic == $preference.getAlcoholic(), 
@@ -14,34 +16,34 @@ query "Best Drinks" (Preference $preference, String $city)
 			restaurant.getCity() == $city) from $drinks,
 		collectList($d)
 	);
-	$filterAllergies: List(size > 0) from accumulate(
-		Drink($d: this, $ingredients: ingredients) from $filter,
-		Number(intValue > 0) from accumulate(
-			$allergies from collect($preference.getAllergies()),
-			String($ingredients contains this) from $allergies,
-			init(int count = 0;),
-			action(count += 1;),
-			reverse(count -= 1;),
-			result(count)
-		),
+	$filterAllergies: List(size > 0) from accumulate ( 
+    	Drink($drink: this, $ingredients: ingredients) from $filter
+    	and
+    	String($ingredients.contains(this)) from $preference.getAllergies(),
+    	collectList($drink)
+    );
+    $biggestValue: Number() from accumulate (
+    	$elem: Number() from $preference.getTexture().values(),
+    	max($elem));
+    $bestTexture: Map.Entry(this.getValue() == $biggestValue) from $preference.getTexture().entrySet();
+    $filterTexture: List(size > 0) from accumulate(
+		Drink($d: this, texture == $bestTexture.getKey()) from $filterAllergies,
 		collectList($d)
 	);
-	$filterTexture: List(size > 0) from accumulate(
-		$bestTexture: Texture() from accumulate(
-			$textureMap: Map<Texture, Double> from $preference.getTexture(),
-			$biggestValue: max($textureMap.values()),
-			$texture: Texture() from accumulate(
-				$entry: Map<Texture, Double>.Entry(this.getValue() == $biggestValue) from $textureMap.entrySet(),
-				result($entry.getKey())
-			),
-			result($texture)
-		),
-		Drink($d: this, texture == $bestTexture) from $filterAllergies,
+	$result:= List(size > 0) from accumulate(
+		Drink($d: this, $taste: taste) from $filterTexture
+		and
+		eval($preference.getTaste().equals($taste)),
 		collectList($d)
 	);
-	$result: List(size > 0) from accumulate(
-		$flavourMap: Map<Flavour, Double> from $preference.getTaste(),
-		Drink($d: this, taste.equals($flavourMap)),
-		collectList($d)
-	)
 end
+
+rule "Best Drinks"
+	when
+		$p: Preference();
+		$city: String();
+        getBestDrinks($p, $city, $result;);
+    then
+    	drools.getKnowledgeRuntime().setGlobal("bestDrinks", $result);
+end
+    	

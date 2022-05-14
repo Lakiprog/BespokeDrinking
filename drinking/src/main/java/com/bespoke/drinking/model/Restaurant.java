@@ -57,4 +57,9 @@ public class Restaurant {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		return "Restaurant [id=" + id + ", name=" + name + ", city=" + city + ", drinks=" + drinks + "]";
+	}
 }

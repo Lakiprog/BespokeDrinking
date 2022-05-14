@@ -119,4 +119,11 @@ public class Drink {
 	public void setTaste(Map<Flavour, Double> taste) {
 		this.taste = taste;
 	}
+
+	@Override
+	public String toString() {
+		return "Drink [id=" + id + ", name=" + name + ", alcoholic=" + alcoholic + ", hot=" + hot + ", caffeine="
+				+ caffeine + ", texture=" + texture + ", ingredients=" + ingredients + ", taste=" + taste
+				+ ", restaurant=" + restaurant + "]";
+	}
 }
