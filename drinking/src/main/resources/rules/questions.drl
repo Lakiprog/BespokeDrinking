@@ -50,7 +50,7 @@ rule "Question: Do you drink coffee or tea more? Answer: coffee"
         answer: Answer(answerNumber == 0) from $question.getSelectedAnswer();
     then
     	System.out.println("User likes coffee");
-        $preference.setHot(true);
+        //$preference.setHot(true);
         $question.setProcessed(true);
         update($user);
 end
