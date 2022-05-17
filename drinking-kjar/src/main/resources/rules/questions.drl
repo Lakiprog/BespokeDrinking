@@ -1,4 +1,4 @@
-package rules;
+package sbnz.integracija;
 
 import com.bespoke.drinking.model.User;
 import com.bespoke.drinking.model.Question;
