@@ -11,11 +11,16 @@ import com.bespoke.drinking.model.Preference;
 import com.bespoke.drinking.model.Restaurant;
 import com.bespoke.drinking.model.Texture;
 import com.bespoke.drinking.model.User;
+import com.bespoke.drinking.service.DrinkService;
 
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +30,9 @@ public class DrinkController {
 
 	@Autowired
 	private KieContainer kieContainer;
+	
+	@Autowired
+	private DrinkService service;
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping(value = "/getBestDrinks")
@@ -131,5 +139,15 @@ public class DrinkController {
 		List<Drink> bestDrinks = (List<Drink>) kieSession.getGlobal("bestDrinks");
 		System.out.println("Number of Rules executed = " + fired);
 		System.out.println(bestDrinks);
+	}
+	
+	@GetMapping(value = "")
+	public List<Drink> getAll(){
+		return service.getAll();
+	}
+	
+	@GetMapping(value = "/{id}")
+	public Drink getOne(@PathVariable("id") int id){
+		return service.getOne(id);
 	}
 }

@@ -50,6 +50,10 @@ public class Restaurant {
 		this.drinks = drinks;
 	}
 	
+	public void addDrink(Drink drink) {
+		this.drinks.add(drink);
+	}
+	
 	public Integer getId() {
 		return id;
 	}

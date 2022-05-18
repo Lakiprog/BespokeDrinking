@@ -70,4 +70,8 @@ public class User {
 	public void setAnsweredQuestions(List<Question> answeredQuestions) {
 		this.answeredQuestions = answeredQuestions;
 	}
+	
+	public void addAnsweredQuestion(Question question) {
+		this.answeredQuestions.add(question);
+	}
 }
