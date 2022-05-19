@@ -59,10 +59,10 @@ const Registration = () => {
                 type="text"
                 name="username"
                 placeholder="Username"
-                invalid={errors.Username?.message}
+                invalid={errors.username?.message}
                 innerRef={register}
               />
-              <FormFeedback>{errors.Username?.message}</FormFeedback>
+              <FormFeedback>{errors.username?.message}</FormFeedback>
             </FormGroup>
 
             <FormGroup>
@@ -71,10 +71,10 @@ const Registration = () => {
                 type="text"
                 name="password"
                 placeholder="Password"
-                invalid={errors.Password?.message}
+                invalid={errors.password?.message}
                 innerRef={register}
               />
-              <FormFeedback>{errors.Password?.message}</FormFeedback>
+              <FormFeedback>{errors.password?.message}</FormFeedback>
             </FormGroup>
 
             <FormGroup>
@@ -83,10 +83,10 @@ const Registration = () => {
                 type="text"
                 name="city"
                 placeholder="NS"
-                invalid={errors.City?.message}
+                invalid={errors.city?.message}
                 innerRef={register}
               />
-              <FormFeedback>{errors.City?.message}</FormFeedback>
+              <FormFeedback>{errors.city?.message}</FormFeedback>
             </FormGroup>
 
             <Button
