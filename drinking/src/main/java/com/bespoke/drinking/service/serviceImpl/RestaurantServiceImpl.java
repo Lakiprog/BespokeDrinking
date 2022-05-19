@@ -3,12 +3,14 @@ package com.bespoke.drinking.service.serviceImpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bespoke.drinking.model.Drink;
 import com.bespoke.drinking.model.Restaurant;
 import com.bespoke.drinking.repository.RestaurantRepository;
 import com.bespoke.drinking.service.RestaurantService;
 
+@Service
 public class RestaurantServiceImpl  implements RestaurantService{
 
 	@Autowired

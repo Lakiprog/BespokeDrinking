@@ -6,9 +6,11 @@ import com.bespoke.drinking.repository.UserRepository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bespoke.drinking.service.UserService;
 
+@Service
 public class UserServiceImpl implements UserService{
 
 	@Autowired

@@ -23,7 +23,12 @@ const Registration = () => {
 	});
 
     const registration = (user: User) => {
-        axios.post(POST_USER, user)
+        axios.post(POST_USER, user, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
+            },
+        })
         .then((res: any) => {
 
         })
