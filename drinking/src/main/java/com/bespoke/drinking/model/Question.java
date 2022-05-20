@@ -73,6 +73,10 @@ public class Question {
 	public void setProcessed(boolean processed) {
 		this.processed = processed;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", processed=" + processed + ", text=" + text + ", answers=" + answers
+				+ ", selectedAnswer=" + selectedAnswer + "]";
+	}
 }

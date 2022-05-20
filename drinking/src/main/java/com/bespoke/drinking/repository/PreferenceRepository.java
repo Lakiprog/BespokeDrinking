@@ -1,12 +1,11 @@
 package com.bespoke.drinking.repository;
 
+import com.bespoke.drinking.model.Preference;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bespoke.drinking.model.User;
-
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface PreferenceRepository extends JpaRepository<Preference, Integer> {
 
-	User findByUsername(String username);
 }

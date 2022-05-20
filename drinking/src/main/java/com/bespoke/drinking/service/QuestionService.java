@@ -4,5 +4,5 @@ import com.bespoke.drinking.model.Question;
 
 public interface QuestionService {
 
-	void addAnsweredQuestion(int userId, Question question);
+	Question addAnsweredQuestion(Integer userId, Question question);
 }

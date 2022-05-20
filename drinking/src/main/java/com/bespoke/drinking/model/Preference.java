@@ -33,7 +33,7 @@ public class Preference {
     @CollectionTable(name="preference_tastes", joinColumns=@JoinColumn(name="preference_id"))
 	private Map<Flavour, Double> taste;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	private User user;
 	
 	public Boolean getAlcoholic() {

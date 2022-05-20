@@ -7,6 +7,8 @@ import com.bespoke.drinking.model.Preference;
 
 import java.util.List
 
+global Question nextQuestion;
+
 //  Do you like hot or cold drinks?
 
 rule "Question: Do you like hot or cold drinks?"
@@ -22,8 +24,30 @@ rule "Question: Do you like hot or cold drinks?"
             result(isHot)
         );
     then
+    	Question next = new Question();
+    	next.setText("Do you drink coffee or tea more?");
+    	next.setProcessed(false);
+    	ArrayList<Answer> answers = new ArrayList<>();
+    	
+		Answer coffee = new Answer();
+		coffee.setId(3);
+		coffee.setText("Coffee");
+		coffee.setAnswerNumber(0);
+		coffee.setQuestion("Do you drink coffee or tea more?");
+		
+		Answer tea = new Answer();
+		tea.setId(4);
+		tea.setText("Tea");
+		tea.setAnswerNumber(1);
+		tea.setQuestion("Do you drink coffee or tea more?");
+		
+		answers.add(coffee);
+		answers.add(tea);
+		
+		next.setAnswers(answers);
         $preference.setHot($hot);
         $question.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", next);
         update($user);
 end
 

@@ -18,6 +18,9 @@ public class Answer {
 	@Column
 	private Integer answerNumber;
 	
+	@Column
+	private String question;
+	
 	public String getText() {
 		return text;
 	}
@@ -41,5 +44,12 @@ public class Answer {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
+	public String getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(String question) {
+		this.question = question;
+	}
 }
