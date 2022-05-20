@@ -1,4 +1,4 @@
-const api = "http://localhost:8080/";
+const api = "/";
 const users = api + "user";
 const restaurants = api + "restaurant";
 
