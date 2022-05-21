@@ -45,3 +45,26 @@ label {
 	padding: 6px;
 	color: white;
 }
+
+.div-dokumenti {
+	max-width: 1000px;
+	margin-bottom: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	padding: 1em;
+	border-style: solid;
+	border-color: darkblue;
+}
+
+.dokumenti-header {
+	font-weight: 600;
+}
+
+.add-drink-modal {
+	margin: 20px;
+	max-width: 50%;
+	max-height: 80%;
+	min-width: 50%;
+	min-height: 50%;
+}

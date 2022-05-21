@@ -14,6 +14,9 @@ const UnauthenticatedNavbar = () => {
 				<Collapse isOpen={!collapsed} navbar>
 					<Nav navbar>
 						<NavItem>
+							<Link to="/restaurants">Restaurants</Link>
+						</NavItem>
+						<NavItem>
 							<Link to="/login">Login</Link>
 						</NavItem>
 					</Nav>

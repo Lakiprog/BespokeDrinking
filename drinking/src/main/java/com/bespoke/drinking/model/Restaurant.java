@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+
 @Entity
 @Table(name = "restaurant")
 public class Restaurant {
@@ -42,6 +45,7 @@ public class Restaurant {
 		this.city = city;
 	}
 	
+	@JsonIgnore
 	public List<Drink> getDrinks() {
 		return drinks;
 	}

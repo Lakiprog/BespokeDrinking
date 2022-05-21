@@ -25,9 +25,4 @@ public class QuestionController {
 	public ResponseEntity<Question> addAnsweredQuestion(@RequestBody Question question, @PathVariable Integer userId) {
 		return new ResponseEntity<Question>(service.addAnsweredQuestion(userId, question), HttpStatus.OK);
 	}
-	
-	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void addAnsweredQuestion(@RequestBody Question question, @PathVariable int id) {
-		service.addAnsweredQuestion(id, question);
-	}
 }

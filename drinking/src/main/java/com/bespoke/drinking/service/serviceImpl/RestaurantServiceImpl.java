@@ -34,6 +34,7 @@ public class RestaurantServiceImpl  implements RestaurantService{
 	@Override
 	public void addDrink(int id, Drink drink) {
 		Restaurant restaurant = getOne(id);
+		drink.setRestaurant(restaurant);
 		restaurant.addDrink(drink);
 		repository.save(restaurant);
 	}

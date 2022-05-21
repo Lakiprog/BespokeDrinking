@@ -33,11 +33,10 @@ const Registration = () => {
   });
 
   const registration = (user: User) => {
-    console.log(user);
-    axios
+      axios
       .post(POST_USER, user)
       .then((res: any) => {
-        console.log(res.data);
+        
       })
       .catch((err: any) => {});
   };
