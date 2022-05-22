@@ -12,7 +12,6 @@ import {
 import UnauthenticatedNavbar from "../../Navbars/UnauthenticatedNavbar";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registrationSchema } from "./RegistrationSchema";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { User } from "../../Model/User";
@@ -28,21 +27,19 @@ const Registration = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(registrationSchema),
     mode: "onChange",
+    resolver: yupResolver(registrationSchema),
   });
 
   const registration = (user: User) => {
-      axios
+    axios
       .post(POST_USER, user)
-      .then((res: any) => {
-        
-      })
+      .then((res: any) => {})
       .catch((err: any) => {});
   };
 
   return (
-    <div>
+    <>
       <UnauthenticatedNavbar />
 
       <Card
@@ -99,7 +96,7 @@ const Registration = () => {
           </Form>
         </CardBody>
       </Card>
-    </div>
+    </>
   );
 };
 export default Registration;

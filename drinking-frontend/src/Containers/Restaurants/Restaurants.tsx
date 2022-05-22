@@ -19,7 +19,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { User } from "../../Model/User";
-import { GET_ALL_RESTAURANTS, POST_RESTAURANT, POST_USER } from "../../api-routes";
+import {
+  GET_ALL_RESTAURANTS,
+  POST_RESTAURANT,
+  POST_USER,
+} from "../../api-routes";
 import { useForm } from "react-hook-form";
 import { Restaurant } from "../../Model/Restaurant";
 import { useEffect, useState } from "react";
@@ -28,7 +32,9 @@ import AddDrinkModal from "../../Components/AddDrinkModal/AddDrinkModal";
 // toast.configure();
 const Restaurants = () => {
   const customId = "restaurants";
-  const [restaurants, setRestaurants] = useState<Array<Restaurant> | null>(null);
+  const [restaurants, setRestaurants] = useState<Array<Restaurant> | null>(
+    null
+  );
   const [showModal, setShowModal] = useState(false);
   const [currentRestaurant, setRestaurant] = useState<Restaurant | null>(null);
 
@@ -49,13 +55,13 @@ const Restaurants = () => {
 
   const getRestaurants = () => {
     axios
-    .get(GET_ALL_RESTAURANTS)
-    .then((res: any) => {
-      setRestaurants(res.data);
-      console.log(res.data);
-    })
-    .catch((err: any) => {})
-  }
+      .get(GET_ALL_RESTAURANTS)
+      .then((res: any) => {
+        setRestaurants(res.data);
+        console.log(res.data);
+      })
+      .catch((err: any) => {});
+  };
 
   const addRestaurant = (restaurant: Restaurant) => {
     axios
@@ -69,7 +75,7 @@ const Restaurants = () => {
   const addDrink = (restaurant: Restaurant) => {
     toggle();
     setRestaurant(restaurant);
-  }
+  };
 
   return (
     <div>
@@ -133,7 +139,7 @@ const Restaurants = () => {
             </thead>
 
             <tbody>
-              {restaurants?.map(restaurant => {
+              {restaurants?.map((restaurant) => {
                 return (
                   <tr key={restaurant.id}>
                     <td>{restaurant.name}</td>
@@ -149,25 +155,21 @@ const Restaurants = () => {
                       </Button>
                     </td>
                   </tr>
-                )
+                );
               })}
             </tbody>
-        </Table>
+          </Table>
         </CardBody>
       </Card>
 
       <Modal isOpen={showModal} toggle={toggle} className="add-drink-modal">
-              <ModalHeader toggle={toggle}>
-                Add Drink
-              </ModalHeader>
+        <ModalHeader toggle={toggle}>Add Drink</ModalHeader>
 
-              {
-                currentRestaurant && (
-                  <div>
-                    <AddDrinkModal restaurant={currentRestaurant}/>
-                  </div>
-                )
-              }
+        {currentRestaurant && (
+          <div>
+            <AddDrinkModal restaurant={currentRestaurant} close={toggle} />
+          </div>
+        )}
       </Modal>
     </div>
   );
