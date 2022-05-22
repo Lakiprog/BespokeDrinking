@@ -156,7 +156,7 @@ const Restaurants = () => {
         </CardBody>
       </Card>
 
-      <Modal isOpen={showModal} toggle={toggle} class="add-drink-modal">
+      <Modal isOpen={showModal} toggle={toggle} className="add-drink-modal">
               <ModalHeader toggle={toggle}>
                 Add Drink
               </ModalHeader>

@@ -63,8 +63,44 @@ label {
 
 .add-drink-modal {
 	margin: 20px;
-	max-width: 50%;
+	max-width: 80%;
 	max-height: 80%;
-	min-width: 50%;
-	min-height: 50%;
+	min-width: 70%;
+	min-height: 70%;
 }
+
+.drink-tastes {
+	border: solid;
+}
+
+.ingredient-btn{
+	margin-bottom: 7px;
+	display: inline;
+}
+
+#input-ingredient{
+	display: inline;
+}
+
+.div-ingredients {
+	margin-top: 7px;
+	padding: 10px;
+	border: solid;
+}
+
+/* 
+
+.form-ingredients{
+	display: inline-block;
+	margin: 25px;
+	float: right;
+}
+
+.list-ingredient {
+	display: inline-block;
+}
+
+.drink-basic{
+	width: 50%;
+	display: inline-block;
+} */

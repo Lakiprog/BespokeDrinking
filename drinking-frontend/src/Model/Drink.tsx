@@ -5,6 +5,6 @@ export interface Drink {
     caffeine: boolean;
     hot: boolean;
     texture: string;
-    taste?: any[];
+    taste?: any;
     ingredients?: string[];
 }
