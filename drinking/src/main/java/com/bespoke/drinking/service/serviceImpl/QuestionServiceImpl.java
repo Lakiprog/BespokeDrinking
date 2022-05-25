@@ -45,7 +45,7 @@ public class QuestionServiceImpl implements QuestionService {
 		question = questionRepository.save(question);
 		User user = exists.get();
 		user.addAnsweredQuestion(question);
-		if (user.getAnsweredQuestions().size() == 1) {
+		if ((user.getAnsweredQuestions().size() == 1) && (user.getPreference() == null)) {
 			Preference p = new Preference();
 			p.setUser(user);
 			p = preferenceRepository.save(p);
