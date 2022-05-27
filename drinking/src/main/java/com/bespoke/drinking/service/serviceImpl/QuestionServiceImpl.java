@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import com.bespoke.drinking.exception.UserNotFoundException;
+import com.bespoke.drinking.model.AnsweredQuestion;
 import com.bespoke.drinking.model.Preference;
 import com.bespoke.drinking.model.Question;
 import com.bespoke.drinking.model.User;
-import com.bespoke.drinking.repository.AnswerRepository;
+import com.bespoke.drinking.repository.AnsweredQuestionRepository;
 import com.bespoke.drinking.repository.PreferenceRepository;
 import com.bespoke.drinking.repository.QuestionRepository;
 import com.bespoke.drinking.repository.UserRepository;
@@ -33,18 +34,17 @@ public class QuestionServiceImpl implements QuestionService {
 	private QuestionRepository questionRepository;
 	
 	@Autowired
-	private AnswerRepository answerRepository;
+	private AnsweredQuestionRepository answeredQuestionRepository;
 
 	@Override
-	public Question addAnsweredQuestion(Integer userId, Question question) {
+	public Question addAnsweredQuestion(Integer userId, AnsweredQuestion answeredQuestion) {
 		Optional<User> exists = userRepository.findById(userId);
 		if (!exists.isPresent()) {
 			throw new UserNotFoundException(userId);
 		}
-		question.setAnswers(answerRepository.findByQuestion(question.getText()));
-		question = questionRepository.save(question);
+		answeredQuestion = answeredQuestionRepository.save(answeredQuestion);
 		User user = exists.get();
-		user.addAnsweredQuestion(question);
+		user.addAnsweredQuestion(answeredQuestion);
 		if ((user.getAnsweredQuestions().size() == 1) && (user.getPreference() == null)) {
 			Preference p = new Preference();
 			p.setUser(user);
@@ -55,7 +55,8 @@ public class QuestionServiceImpl implements QuestionService {
 		
 		kieSession.insert(user);
 		kieSession.fireAllRules();
-		Question next = (Question) kieSession.getGlobal("nextQuestion");
+		String nextQuestionText = (String) kieSession.getGlobal("nextQuestion");
+		Question next = questionRepository.findByText(nextQuestionText);
 		
 		userRepository.save(user);
 		return next;

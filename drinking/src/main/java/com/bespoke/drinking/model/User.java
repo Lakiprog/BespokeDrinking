@@ -21,7 +21,7 @@ public class User {
 	@ElementCollection(fetch=FetchType.EAGER)
     @Column(name="answered_questions")
     @CollectionTable(name="user_answeredQuestions", joinColumns=@JoinColumn(name="user_id"))
-	private List<Question> answeredQuestions;
+	private List<AnsweredQuestion> answeredQuestions;
 
 	public String getUsername() {
 		return username;
@@ -63,15 +63,15 @@ public class User {
 		this.id = id;
 	}
 	
-	public List<Question> getAnsweredQuestions() {
+	public List<AnsweredQuestion> getAnsweredQuestions() {
 		return answeredQuestions;
 	}
 
-	public void setAnsweredQuestions(List<Question> answeredQuestions) {
+	public void setAnsweredQuestions(List<AnsweredQuestion> answeredQuestions) {
 		this.answeredQuestions = answeredQuestions;
 	}
 	
-	public void addAnsweredQuestion(Question question) {
-		this.answeredQuestions.add(question);
+	public void addAnsweredQuestion(AnsweredQuestion answeredQuestion) {
+		this.answeredQuestions.add(answeredQuestion);
 	}
 }

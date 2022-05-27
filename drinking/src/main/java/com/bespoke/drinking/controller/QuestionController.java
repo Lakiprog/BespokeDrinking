@@ -1,5 +1,6 @@
 package com.bespoke.drinking.controller;
 
+import com.bespoke.drinking.model.AnsweredQuestion;
 import com.bespoke.drinking.model.Question;
 import com.bespoke.drinking.service.QuestionService;
 
@@ -22,7 +23,7 @@ public class QuestionController {
 	
 	@PutMapping(value = "/addAnsweredQuestion/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Question> addAnsweredQuestion(@RequestBody Question question, @PathVariable Integer userId) {
-		return new ResponseEntity<Question>(service.addAnsweredQuestion(userId, question), HttpStatus.OK);
+	public ResponseEntity<Question> addAnsweredQuestion(@RequestBody AnsweredQuestion answeredQuestion, @PathVariable Integer userId) {
+		return new ResponseEntity<Question>(service.addAnsweredQuestion(userId, answeredQuestion), HttpStatus.OK);
 	}
 }

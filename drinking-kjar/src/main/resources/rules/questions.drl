@@ -1,13 +1,10 @@
 package rules;
 
-import com.bespoke.drinking.model.User;
-import com.bespoke.drinking.model.Question;
-import com.bespoke.drinking.model.Answer;
-import com.bespoke.drinking.model.Preference;
+import com.bespoke.drinking.model.*;
 
 import java.util.List
 
-global Question nextQuestion;
+global String nextQuestion;
 
 //  Do you like hot or cold drinks?
 
@@ -16,38 +13,17 @@ rule "Question: Do you like hot or cold drinks?"
         $user: User();
         User($preference: preference, eval($preference.getHot() == null));
         User($answeredQuestions: answeredQuestions);
-        $question: Question(text == "Do you like hot or cold drinks?", processed == false) from $answeredQuestions;
+        $answeredQuestion: AnsweredQuestion(question.getText() == "Do you like hot or cold drinks?", processed == false) from $answeredQuestions;
         $hot: Boolean() from accumulate( 
-        	Answer($answer: this) from $question.getSelectedAnswer(),
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
             init( Boolean isHot = false; ),
             action( if ($answer.getAnswerNumber() == 0) {isHot = true;}; ),
             result(isHot)
         );
     then
-    	Question next = new Question();
-    	next.setText("Do you drink coffee or tea more?");
-    	next.setProcessed(false);
-    	ArrayList<Answer> answers = new ArrayList<>();
-    	
-		Answer coffee = new Answer();
-		coffee.setId(3);
-		coffee.setText("Coffee");
-		coffee.setAnswerNumber(0);
-		coffee.setQuestion("Do you drink coffee or tea more?");
-		
-		Answer tea = new Answer();
-		tea.setId(4);
-		tea.setText("Tea");
-		tea.setAnswerNumber(1);
-		tea.setQuestion("Do you drink coffee or tea more?");
-		
-		answers.add(coffee);
-		answers.add(tea);
-		
-		next.setAnswers(answers);
         $preference.setHot($hot);
-        $question.setProcessed(true);
-        drools.getKnowledgeRuntime().setGlobal("nextQuestion", next);
+        $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you drink coffee or tea more?");
         update($user);
 end
 
@@ -59,16 +35,16 @@ rule "Question: Do you drink coffee or tea more?"
         $user: User();
         User($preference: preference, eval($preference.getHot() != null), eval($preference.getHot()));
         User($answeredQuestions: answeredQuestions);
-        $question: Question(text == "Do you drink coffee or tea more?", processed == false) from $answeredQuestions;
+        $answeredQuestion: AnsweredQuestion(question.getText() == "Do you drink coffee or tea more?", processed == false) from $answeredQuestions;
         $hot: Boolean() from accumulate( 
-        	Answer($answer: this) from $question.getSelectedAnswer(),
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
             init( Boolean isHot = false; ),
             action( if ($answer.getAnswerNumber() == 0) {isHot = true;}; ),
             result(isHot)
         );
     then
         //$preference.setHot($hot);
-        $question.setProcessed(true);
+        $answeredQuestion.setProcessed(true);
         update($user);
 end
 

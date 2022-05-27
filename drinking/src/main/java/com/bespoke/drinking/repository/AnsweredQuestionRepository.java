@@ -1,12 +1,11 @@
 package com.bespoke.drinking.repository;
 
-
-import com.bespoke.drinking.model.Answer;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.bespoke.drinking.model.AnsweredQuestion;
+
 @Repository
-public interface AnswerRepository extends JpaRepository<Answer, Integer> {
-	
+public interface AnsweredQuestionRepository extends JpaRepository<AnsweredQuestion, Integer>{
+
 }

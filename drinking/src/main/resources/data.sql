@@ -12,5 +12,15 @@ insert into drink_tastes (drink_id, taste, value) values (1, 3, 5);
 
 insert into user (username, password, city) values ('markuza', 'markuza', 'NS');
 
-insert into answer (text, answer_number, question) values ('Hot', 0, 'Do you like hot or cold drinks?');
-insert into answer (text, answer_number, question) values ('Cold', 1, 'Do you like hot or cold drinks?');
+insert into question (text) values ('Do you like hot or cold drinks?');
+insert into question (text) values ('Do you drink coffee or tea more?');
+
+insert into answer (text, answer_number) values ('Hot', 0);
+insert into answer (text, answer_number) values ('Cold', 1);
+insert into answer (text, answer_number) values ('Coffee', 0);
+insert into answer (text, answer_number) values ('Tea', 1);
+
+insert into question_answers (question_id, answers_id) values (1, 1);
+insert into question_answers (question_id, answers_id) values (1, 2);
+insert into question_answers (question_id, answers_id) values (2, 3);
+insert into question_answers (question_id, answers_id) values (2, 4);
