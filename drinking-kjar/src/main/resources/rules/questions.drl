@@ -6,6 +6,69 @@ import java.util.List
 
 global String nextQuestion;
 
+// Are you 18?
+
+rule "Question: Are you 18?"
+	when
+        $user: User();
+        User($preference: preference);
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "Are you 18?", processed == false) from $answeredQuestions;
+        $alcoholic: Boolean() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+            init( Boolean isAlcoholic = true; ),
+            action( if ($answer.getAnswerNumber() == 0) {isAlcoholic = false;}; ),
+            result(isAlcoholic)
+        );
+    then
+    	$preference.setAlcoholic($alcoholic);
+        $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you like alcoholic drinks?");
+        update($user);
+end
+
+// Do you like alcoholic drinks?
+
+rule "Question: Do you like alcoholic drinks?"
+	when
+        $user: User();
+        User($preference: preference, eval($preference.getAlcoholic() != null));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "Do you like alcoholic drinks?", processed == false) from $answeredQuestions;
+        $alcoholic: Boolean() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+            init( Boolean isAlcoholic = true; ),
+            action( if ($answer.getAnswerNumber() == 0) {isAlcoholic = false;}; ),
+            result(isAlcoholic)
+        );
+    then
+    	$preference.setAlcoholic($alcoholic);
+        $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you like drinks with caffeine?");
+        update($user);
+end
+
+// Do you like drinks with caffeine?
+
+rule "Question: Do you like drinks with caffeine?"
+	when
+        $user: User();
+        User($preference: preference, eval($preference.getCaffeine() == null));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "Do you like drinks with caffeine?", processed == false) from $answeredQuestions;
+        $caffeine: Boolean() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+            init( Boolean isCaffeine = true; ),
+            action( if ($answer.getAnswerNumber() == 0) {isCaffeine = false;}; ),
+            result(isCaffeine)
+        );
+    then
+    	$preference.setCaffeine($caffeine);
+        $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you like hot or cold drinks?");
+        update($user);
+end
+
 //  Do you like hot or cold drinks?
 
 rule "Question: Do you like hot or cold drinks?"
@@ -23,7 +86,81 @@ rule "Question: Do you like hot or cold drinks?"
     then
         $preference.setHot($hot);
         $answeredQuestion.setProcessed(true);
-        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you drink coffee or tea more?");
+        if (!$preference.getHot() && !$preference.getAlcoholic()) {
+        	drools.getKnowledgeRuntime().setGlobal("nextQuestion", "What cold drink do you prefer?");
+        } else if (!$preference.getHot() && $preference.getAlcoholic()) {
+        	drools.getKnowledgeRuntime().setGlobal("nextQuestion", "What alcoholic drink do you prefer?");
+        } else {
+        	drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you drink coffee or tea more?");
+        }
+        update($user);
+end
+
+// What cold drink do you prefer?
+
+rule "Question: What cold drink do you prefer?"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot() != null), 
+        	eval(!$preference.getHot()), eval(!$preference.getAlcoholic()));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "What cold drink do you prefer?", processed == false) from $answeredQuestions;
+        $selectedAnswer: Integer() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+        	init(Integer selected = 0;),
+            action( 
+            		if ($answer.getAnswerNumber() == 0) {
+            			// Milkshake
+            			System.out.println("Milkshake");
+            		} else if ($answer.getAnswerNumber() == 1) {
+            			// Squeezed fruit juice
+            			System.out.println("Squeezed fruit juice");
+            		} else if ($answer.getAnswerNumber() == 2) {
+            			// Lemonade
+            			System.out.println("Lemonade");
+            		} else if ($answer.getAnswerNumber() == 3) {
+            			// Coca cola
+            			System.out.println("Coca cola");
+            		};
+            ),
+            result(selected)
+        );
+    then
+        $answeredQuestion.setProcessed(true);
+        update($user);
+end
+
+// What alcoholic drink do you prefer?
+
+rule "Question: What alcoholic drink do you prefer?"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot() != null), 
+        	eval(!$preference.getHot()), eval($preference.getAlcoholic()));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "What alcoholic drink do you prefer?", processed == false) from $answeredQuestions;
+        $selectedAnswer: Integer() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+        	init(Integer selected = 0;),
+            action( 
+            		if ($answer.getAnswerNumber() == 0) { 
+            			// Gin tonic
+						System.out.println("Gin tonic");
+            		} else if ($answer.getAnswerNumber() == 1) {
+            			// Mohito
+						System.out.println("Mohito");
+            		} else if ($answer.getAnswerNumber() == 2) {
+            			// Vine 
+						System.out.println("Vine");
+            		} else if ($answer.getAnswerNumber() == 3) {
+            			// Cocktail
+						System.out.println("Cocktail");
+            		};
+            	),
+            result(selected)
+        );
+    then
+        $answeredQuestion.setProcessed(true);
         update($user);
 end
 
@@ -33,19 +170,49 @@ end
 rule "Question: Do you drink coffee or tea more?"
     when
         $user: User();
-        User($preference: preference, eval($preference.getHot() != null), eval($preference.getHot()));
+        User($preference: preference, eval($preference.getHot()));
         User($answeredQuestions: answeredQuestions);
         $answeredQuestion: AnsweredQuestion(question.getText() == "Do you drink coffee or tea more?", processed == false) from $answeredQuestions;
-        $hot: Boolean() from accumulate( 
+        $coffee: Boolean() from accumulate( 
         	Answer($answer: this) from $answeredQuestion.getAnswer(),
-            init( Boolean isHot = false; ),
-            action( if ($answer.getAnswerNumber() == 0) {isHot = true;}; ),
-            result(isHot)
+            init( Boolean isCoffee = true; ),
+            action( if ($answer.getAnswerNumber() == 0) {isCoffee = false;}; ),
+            result(isCoffee)
         );
     then
-        //$preference.setHot($hot);
+    	if (!$coffee) {
+    		drools.getKnowledgeRuntime().setGlobal("nextQuestion", "How do you drink your tea?");
+    	} else {
+    		drools.getKnowledgeRuntime().setGlobal("nextQuestion", "How do you drink your coffee?");
+    	}
         $answeredQuestion.setProcessed(true);
         update($user);
 end
 
-// How do you drink your coffee
+// How do you drink your coffee?
+
+rule "Question: How do you drink your coffee/tea?"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot()));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "How do you drink your coffee?" || 
+        	question.getText() == "How do you drink your tea?", processed == false) from $answeredQuestions;
+        $selectedAnswer: Integer() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+        	init(Integer selected = 0;),
+            action( 
+            		if ($answer.getAnswerNumber() == 0) {
+						// Bitter
+						System.out.println("Bitter");
+					} else if ($answer.getAnswerNumber() == 1) {
+						// Sweet
+						System.out.println("Sweet");
+					};
+            	),
+            result(selected)
+        );
+    then
+        $answeredQuestion.setProcessed(true);
+        update($user);
+end
