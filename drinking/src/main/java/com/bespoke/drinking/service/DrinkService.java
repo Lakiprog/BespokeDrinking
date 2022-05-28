@@ -9,4 +9,6 @@ public interface DrinkService {
 	List<Drink> getAll();
 	
 	Drink getOne(int id);
+	
+	List<Drink> getBestDrinks(Integer userId);
 }

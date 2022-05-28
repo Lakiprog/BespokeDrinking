@@ -27,6 +27,12 @@ public class Question {
     @CollectionTable(name="question_answers", joinColumns=@JoinColumn(name="question_id"))
 	private List<Answer> answers;
 	
+	public Question() {}
+	
+	public Question(String text) {
+		this.text = text;
+	}
+	
 	public String getText() {
 		return text;
 	}

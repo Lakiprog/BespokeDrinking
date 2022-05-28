@@ -111,16 +111,22 @@ rule "Question: What cold drink do you prefer?"
             action( 
             		if ($answer.getAnswerNumber() == 0) {
             			// Milkshake
-            			System.out.println("Milkshake");
+            			$preference.getTaste().put(Flavour.SWEET, 6.0);
+						$preference.getTexture().put(Texture.HALF_THICC, 4.0);
             		} else if ($answer.getAnswerNumber() == 1) {
             			// Squeezed fruit juice
-            			System.out.println("Squeezed fruit juice");
+            			$preference.getTaste().put(Flavour.SWEET, 3.0);
+            			$preference.getTaste().put(Flavour.SOUR, 3.0);
+						$preference.getTexture().put(Texture.LIQUID, 7.0);
             		} else if ($answer.getAnswerNumber() == 2) {
             			// Lemonade
-            			System.out.println("Lemonade");
+            			$preference.getTaste().put(Flavour.SOUR, 6.0);
+            			$preference.getTaste().put(Flavour.SWEET, 3.0);
+            			$preference.getTexture().put(Texture.LIQUID, 7.0);
             		} else if ($answer.getAnswerNumber() == 3) {
             			// Coca cola
-            			System.out.println("Coca cola");
+            			$preference.getTaste().put(Flavour.SWEET, 8.0);
+            			$preference.getTexture().put(Texture.LIQUID, 7.0);
             		};
             ),
             result(selected)
@@ -145,22 +151,31 @@ rule "Question: What alcoholic drink do you prefer?"
             action( 
             		if ($answer.getAnswerNumber() == 0) { 
             			// Gin tonic
-						System.out.println("Gin tonic");
+						$preference.getTaste().put(Flavour.SOUR, 4.0);
+						$preference.getTaste().put(Flavour.BITTER, 3.0);
+						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		} else if ($answer.getAnswerNumber() == 1) {
             			// Mohito
-						System.out.println("Mohito");
+            			$preference.getTaste().put(Flavour.SWEET, 4.0);
+						$preference.getTaste().put(Flavour.BITTER, 2.0);
+						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		} else if ($answer.getAnswerNumber() == 2) {
-            			// Vine 
-						System.out.println("Vine");
+            			// Vine
+            			$preference.getTaste().put(Flavour.SWEET, 3.0);
+						$preference.getTaste().put(Flavour.SOUR, 3.0);
+						$preference.getTaste().put(Flavour.BITTER, 3.0);
+						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		} else if ($answer.getAnswerNumber() == 3) {
             			// Cocktail
-						System.out.println("Cocktail");
+            			$preference.getTaste().put(Flavour.SOUR, 4.0);
+						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		};
             	),
             result(selected)
         );
     then
         $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "END");
         update($user);
 end
 
@@ -204,10 +219,10 @@ rule "Question: How do you drink your coffee/tea?"
             action( 
             		if ($answer.getAnswerNumber() == 0) {
 						// Bitter
-						System.out.println("Bitter");
+						$preference.getTaste().put(Flavour.BITTER, 5.0);
 					} else if ($answer.getAnswerNumber() == 1) {
 						// Sweet
-						System.out.println("Sweet");
+						$preference.getTaste().put(Flavour.SWEET, 5.0);
 					};
             	),
             result(selected)

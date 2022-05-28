@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import com.bespoke.drinking.exception.UserNotFoundException;
+import com.bespoke.drinking.exception.ResourceNotFoundException;
 import com.bespoke.drinking.model.AnsweredQuestion;
 import com.bespoke.drinking.model.Preference;
 import com.bespoke.drinking.model.Question;
@@ -40,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
 	public Question addAnsweredQuestion(Integer userId, AnsweredQuestion answeredQuestion) {
 		Optional<User> exists = userRepository.findById(userId);
 		if (!exists.isPresent()) {
-			throw new UserNotFoundException(userId);
+			throw new ResourceNotFoundException("User with this id does not exist! - " + userId);
 		}
 		answeredQuestion = answeredQuestionRepository.save(answeredQuestion);
 		User user = exists.get();
@@ -56,9 +56,11 @@ public class QuestionServiceImpl implements QuestionService {
 		kieSession.insert(user);
 		kieSession.fireAllRules();
 		String nextQuestionText = (String) kieSession.getGlobal("nextQuestion");
-		Question next = questionRepository.findByText(nextQuestionText);
-		
 		userRepository.save(user);
+		if (nextQuestionText.equals("END")) {
+			return new Question(nextQuestionText);
+		}
+		Question next = questionRepository.findByText(nextQuestionText);
 		return next;
 	}
 }

@@ -16,7 +16,7 @@ public class Preference {
 	@Column
 	private Boolean alcoholic, hot, caffeine;
 	
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.LAZY)
     @MapKeyColumn(name="texture")
     @Column(name="value")
     @CollectionTable(name="preference_textures", joinColumns=@JoinColumn(name="preference_id"))
@@ -27,7 +27,7 @@ public class Preference {
     @Column(name = "allergy")
 	private List<String> allergies;
 	
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.LAZY)
     @MapKeyColumn(name="taste")
     @Column(name="value")
     @CollectionTable(name="preference_tastes", joinColumns=@JoinColumn(name="preference_id"))
@@ -98,5 +98,11 @@ public class Preference {
 	
 	public void setTaste(Map<Flavour, Double> taste) {
 		this.taste = taste;
+	}
+
+	@Override
+	public String toString() {
+		return "Preference [id=" + id + ", alcoholic=" + alcoholic + ", hot=" + hot + ", caffeine=" + caffeine
+				+ ", texture=" + texture + ", allergies=" + allergies + ", taste=" + taste + ", user=" + user + "]";
 	}
 }

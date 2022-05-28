@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -18,7 +20,7 @@ public class User {
 	@OneToOne
 	private Preference preference;
 	
-	@ElementCollection(fetch=FetchType.EAGER)
+	@ElementCollection(fetch=FetchType.LAZY)
     @Column(name="answered_questions")
     @CollectionTable(name="user_answeredQuestions", joinColumns=@JoinColumn(name="user_id"))
 	private List<AnsweredQuestion> answeredQuestions;
@@ -47,6 +49,7 @@ public class User {
 		this.city = city;
 	}
 
+	@JsonIgnore
 	public Preference getPreference() {
 		return preference;
 	}
@@ -63,6 +66,7 @@ public class User {
 		this.id = id;
 	}
 	
+	@JsonIgnore
 	public List<AnsweredQuestion> getAnsweredQuestions() {
 		return answeredQuestions;
 	}

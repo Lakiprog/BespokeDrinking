@@ -1,12 +1,13 @@
 package com.bespoke.drinking.service.serviceImpl;
 
-import com.bespoke.drinking.exception.UserNotFoundException;
+import com.bespoke.drinking.exception.ResourceNotFoundException;
 import com.bespoke.drinking.model.Preference;
 import com.bespoke.drinking.model.User;
 import com.bespoke.drinking.repository.PreferenceRepository;
 import com.bespoke.drinking.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,11 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User getOne(int id) {
-		return repository.getById(id);
+		Optional<User> exists =  repository.findById(id);
+		if (!exists.isPresent()) {
+			throw new ResourceNotFoundException("User with this id does not exist! - " + id);
+		}
+		return exists.get();
 	}
 
 	@Override
@@ -39,10 +44,11 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void addAllergies(int id, List<String> allergies) {
-		User user = repository.getById(id);
-		if(user == null) {
-			throw new UserNotFoundException(id);
+		Optional<User> exists = repository.findById(id);
+		if(!exists.isPresent()) {
+			throw new ResourceNotFoundException("User with this id does not exist! - " + id);
 		}
+		User user = exists.get();
 		Preference p = new Preference();
 		p.setUser(user);
 		p.setAllergies(allergies);
@@ -50,6 +56,4 @@ public class UserServiceImpl implements UserService{
 		user.setPreference(p);
 		repository.save(user);
 	}
-	
-	
 }
