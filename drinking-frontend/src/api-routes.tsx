@@ -16,4 +16,4 @@ export const POST_RESTAURANT = restaurants;
 export const ADD_DRINK_TO_RESTAURANT = restaurants + "/";
 
 //questions
-export const ANSWER_QUESTION = questions + "/";
+export const ANSWER_QUESTION = questions + "/addAnsweredQuestion/";

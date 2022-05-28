@@ -19,6 +19,9 @@ const UnauthenticatedNavbar = () => {
 						<NavItem>
 							<Link to="/login">Login</Link>
 						</NavItem>
+						<NavItem>
+							<Link to="/questionnaire">Questionnaire</Link>
+						</NavItem>
 					</Nav>
 				</Collapse>
 			</Navbar>

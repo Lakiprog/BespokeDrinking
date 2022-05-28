@@ -7,17 +7,21 @@ import { ADD_USER_ALLERGIES, ANSWER_QUESTION } from "../../api-routes";
 import { useState } from "react";
 
 // toast.configure();
-const QuestionComponent = (props: {question : Question, nextQuestion: Function}) => {
+const QuestionComponent = (props: {question : any, nextQuestion: Function}) => {
   const customId = "questionComponent";
-  const [selectedAnswer, setAnswer] = useState(props.question.answers[0]);
+  const [selectedAnswer, setAnswer] = useState<Answer | null>(null);
 
   const answer = () => {
     let copy = props.question;
-    copy.selectedAnswer = selectedAnswer;
+    let answeredQuestion = {
+      'processed' : false,
+      'answer' : selectedAnswer,
+      'question' : copy,
+    }
 
     //TODO kad budemo imali login da se ovde stavi id korisnika
     axios
-    .put(ANSWER_QUESTION + 1, copy)
+    .put(ANSWER_QUESTION + 1, answeredQuestion)
     .then(response => {
         props.nextQuestion(response.data);
     })
@@ -34,7 +38,7 @@ const QuestionComponent = (props: {question : Question, nextQuestion: Function})
             <CardTitle tag="h2">{props.question.text}</CardTitle>
                       
                       <Form>
-                        {props.question.answers.map(answer => (
+                        {props.question.answers.map( (answer : Answer) => (
                             <div key={answer.id}>
                               <Label>{answer.text}</Label>
                               <Input

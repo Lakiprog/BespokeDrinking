@@ -5,8 +5,8 @@ import axios from "axios";
 import { ADD_USER_ALLERGIES } from "../../api-routes";
 
 // toast.configure();
-const AddAllergies = () => {
-  const customId = "addAllergies";
+const Allergies = (props : {added: Function}) => {
+  const customId = "allergies";
   const [allergie, setAllergie] = useState<string>("");
   const [allergies, setAllergies] = useState<string[]>([]);
 
@@ -23,7 +23,7 @@ const AddAllergies = () => {
     axios
     .put(ADD_USER_ALLERGIES + 1, allergies)
     .then(response => {
-
+        props.added();
     })
     .catch(err => {
 
@@ -78,4 +78,4 @@ const AddAllergies = () => {
     
   );
 };
-export default AddAllergies;
+export default Allergies;
