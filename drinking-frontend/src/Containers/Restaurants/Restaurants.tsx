@@ -13,7 +13,6 @@ import {
 	ModalHeader,
 	Table,
 } from "reactstrap";
-import UnauthenticatedNavbar from "../../Navbars/UnauthenticatedNavbar";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { restaurantSchema } from "./RestaurantSchema";
 import { toast } from "react-toastify";
@@ -24,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { Restaurant } from "../../Model/Restaurant";
 import { useEffect, useState } from "react";
 import AddDrinkModal from "../../Components/AddDrinkModal/AddDrinkModal";
+import AdminNavbar from "../../Navbars/AdminNavbar";
 
 // toast.configure();
 const Restaurants = () => {
@@ -75,7 +75,7 @@ const Restaurants = () => {
 
 	return (
 		<div>
-			<UnauthenticatedNavbar />
+			<AdminNavbar />
 
 			<Card
 				className="card-login-registracija"

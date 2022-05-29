@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import axios from "axios";
 import { ADD_USER_ALLERGIES } from "../../api-routes";
+import * as authService from "../../Auth/AuthService";
 
 // toast.configure();
 const Allergies = (props: { added: Function }) => {
@@ -29,9 +30,8 @@ const Allergies = (props: { added: Function }) => {
 	};
 
 	const addAllergies = () => {
-		//TODO kad budemo imali login da se ovde stavi id korisnika
 		axios
-			.put(ADD_USER_ALLERGIES + 1, allergies)
+			.put(ADD_USER_ALLERGIES + Number(authService.getId()), allergies)
 			.then((response) => {
 				props.added();
 			})

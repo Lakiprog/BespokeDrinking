@@ -1,4 +1,3 @@
-import UnauthenticatedNavbar from "../../Navbars/UnauthenticatedNavbar";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import { Question } from "../../Model/Question";
@@ -8,6 +7,8 @@ import { GET_ONE_USER, GET_BEST_DRINKS } from "../../api-routes";
 import Allergies from "../../Components/Allergies/Allergies";
 import QuestionComponent from "../../Components/QuestionComponent/QuestionComponent";
 import { Answer } from "../../Model/Answer";
+import UserNavbar from "../../Navbars/UserNavbar";
+import * as authService from "../../Auth/AuthService";
 
 // toast.configure();
 const Questionnaire = () => {
@@ -22,9 +23,8 @@ const Questionnaire = () => {
 	}, []);
 
 	const getUser = () => {
-		//TODO kad imamo login zameniti id
 		axios
-			.get(GET_ONE_USER + 1)
+			.get(GET_ONE_USER + Number(authService.getId()))
 			.then((response) => {
 				setUser(response.data);
 			})
@@ -33,7 +33,7 @@ const Questionnaire = () => {
 
 	const getBestDrinks = () => {
 		axios
-			.get(GET_BEST_DRINKS + 1)
+			.get(GET_BEST_DRINKS + Number(authService.getId()))
 			.then((response) => {
 				console.log(response.data);
 			})
@@ -71,7 +71,7 @@ const Questionnaire = () => {
 
 	return (
 		<div>
-			<UnauthenticatedNavbar />
+			<UserNavbar />
 
 			{!filledAllergies && (
 				<div>

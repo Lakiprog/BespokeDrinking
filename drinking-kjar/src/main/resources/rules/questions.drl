@@ -23,7 +23,11 @@ rule "Question: Are you 18?"
     then
     	$preference.setAlcoholic($alcoholic);
         $answeredQuestion.setProcessed(true);
-        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you like alcoholic drinks?");
+        if ($alcoholic) {
+        	drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you like alcoholic drinks?");
+        } else {
+        	drools.getKnowledgeRuntime().setGlobal("nextQuestion", "Do you like drinks with caffeine?");
+        }
         update($user);
 end
 
@@ -105,34 +109,41 @@ rule "Question: What cold drink do you prefer?"
         	eval(!$preference.getHot()), eval(!$preference.getAlcoholic()));
         User($answeredQuestions: answeredQuestions);
         $answeredQuestion: AnsweredQuestion(question.getText() == "What cold drink do you prefer?", processed == false) from $answeredQuestions;
-        $selectedAnswer: Integer() from accumulate( 
+        $updatedTasteMap: Map() from accumulate( 
         	Answer($answer: this) from $answeredQuestion.getAnswer(),
-        	init(Integer selected = 0;),
-            action( 
+        	init(HashMap<Flavour, Double> tasteMap = new HashMap<Flavour, Double>();),
+            action(
+            		tasteMap.put(Flavour.SWEET, 0.0);
+            		tasteMap.put(Flavour.SALTY, 0.0);
+            		tasteMap.put(Flavour.UMAMI, 0.0);
+            		tasteMap.put(Flavour.BITTER, 0.0);
+            		tasteMap.put(Flavour.SOUR, 0.0);
             		if ($answer.getAnswerNumber() == 0) {
             			// Milkshake
-            			$preference.getTaste().put(Flavour.SWEET, 6.0);
+            			tasteMap.put(Flavour.SWEET, tasteMap.get(Flavour.SWEET) + 6.0);
 						$preference.getTexture().put(Texture.HALF_THICC, 4.0);
             		} else if ($answer.getAnswerNumber() == 1) {
             			// Squeezed fruit juice
-            			$preference.getTaste().put(Flavour.SWEET, 3.0);
-            			$preference.getTaste().put(Flavour.SOUR, 3.0);
+            			tasteMap.put(Flavour.SWEET, tasteMap.get(Flavour.SWEET) + 3.0);
+            			tasteMap.put(Flavour.SOUR, tasteMap.get(Flavour.SOUR) + 3.0);
 						$preference.getTexture().put(Texture.LIQUID, 7.0);
             		} else if ($answer.getAnswerNumber() == 2) {
             			// Lemonade
-            			$preference.getTaste().put(Flavour.SOUR, 6.0);
-            			$preference.getTaste().put(Flavour.SWEET, 3.0);
+            			tasteMap.put(Flavour.SWEET, tasteMap.get(Flavour.SWEET) + 3.0);
+            			tasteMap.put(Flavour.SOUR, tasteMap.get(Flavour.SOUR) + 6.0);
             			$preference.getTexture().put(Texture.LIQUID, 7.0);
             		} else if ($answer.getAnswerNumber() == 3) {
             			// Coca cola
-            			$preference.getTaste().put(Flavour.SWEET, 8.0);
+            			tasteMap.put(Flavour.SWEET, tasteMap.get(Flavour.SWEET) + 6.0);
             			$preference.getTexture().put(Texture.LIQUID, 7.0);
             		};
             ),
-            result(selected)
+            result(tasteMap)
         );
     then
+    	$preference.setTaste($updatedTasteMap);
         $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "What kind of ingredients do you prefer?");
         update($user);
 end
 
@@ -145,37 +156,43 @@ rule "Question: What alcoholic drink do you prefer?"
         	eval(!$preference.getHot()), eval($preference.getAlcoholic()));
         User($answeredQuestions: answeredQuestions);
         $answeredQuestion: AnsweredQuestion(question.getText() == "What alcoholic drink do you prefer?", processed == false) from $answeredQuestions;
-        $selectedAnswer: Integer() from accumulate( 
+        $updatedTasteMap: Map() from accumulate( 
         	Answer($answer: this) from $answeredQuestion.getAnswer(),
-        	init(Integer selected = 0;),
+        	init(HashMap<Flavour, Double> tasteMap = new HashMap<Flavour, Double>();),
             action( 
+            		tasteMap.put(Flavour.SWEET, 0.0);
+            		tasteMap.put(Flavour.SALTY, 0.0);
+            		tasteMap.put(Flavour.UMAMI, 0.0);
+            		tasteMap.put(Flavour.BITTER, 0.0);
+            		tasteMap.put(Flavour.SOUR, 0.0);
             		if ($answer.getAnswerNumber() == 0) { 
             			// Gin tonic
-						$preference.getTaste().put(Flavour.SOUR, 4.0);
-						$preference.getTaste().put(Flavour.BITTER, 3.0);
+						tasteMap.put(Flavour.SOUR, tasteMap.get(Flavour.SOUR) + 4.0);
+						tasteMap.put(Flavour.BITTER, tasteMap.get(Flavour.BITTER) + 3.0);
 						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		} else if ($answer.getAnswerNumber() == 1) {
             			// Mohito
-            			$preference.getTaste().put(Flavour.SWEET, 4.0);
-						$preference.getTaste().put(Flavour.BITTER, 2.0);
+            			tasteMap.put(Flavour.SWEET, tasteMap.get(Flavour.SWEET) + 4.0);
+						tasteMap.put(Flavour.BITTER, tasteMap.get(Flavour.BITTER) + 2.0);
 						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		} else if ($answer.getAnswerNumber() == 2) {
             			// Vine
-            			$preference.getTaste().put(Flavour.SWEET, 3.0);
-						$preference.getTaste().put(Flavour.SOUR, 3.0);
-						$preference.getTaste().put(Flavour.BITTER, 3.0);
+            			tasteMap.put(Flavour.SWEET, tasteMap.get(Flavour.SWEET) + 3.0);
+						tasteMap.put(Flavour.SOUR, tasteMap.get(Flavour.SOUR) + 3.0);
+						tasteMap.put(Flavour.BITTER, tasteMap.get(Flavour.BITTER) + 3.0);
 						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		} else if ($answer.getAnswerNumber() == 3) {
             			// Cocktail
-            			$preference.getTaste().put(Flavour.SOUR, 4.0);
+            			tasteMap.put(Flavour.SOUR, tasteMap.get(Flavour.SOUR) + 4.0);
 						$preference.getTexture().put(Texture.LIQUID, 6.0);
             		};
             	),
-            result(selected)
+            result(tasteMap)
         );
     then
+    	$preference.setTaste($updatedTasteMap);
         $answeredQuestion.setProcessed(true);
-        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "END");
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "What kind of ingredients do you prefer?");
         update($user);
 end
 
@@ -213,21 +230,100 @@ rule "Question: How do you drink your coffee/tea?"
         User($answeredQuestions: answeredQuestions);
         $answeredQuestion: AnsweredQuestion(question.getText() == "How do you drink your coffee?" || 
         	question.getText() == "How do you drink your tea?", processed == false) from $answeredQuestions;
+        $updatedTasteMap: Map() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+        	init(HashMap<Flavour, Double> tasteMap = new HashMap<Flavour, Double>();),
+            action( 
+            		tasteMap.put(Flavour.SWEET, 0.0);
+            		tasteMap.put(Flavour.SALTY, 0.0);
+            		tasteMap.put(Flavour.UMAMI, 0.0);
+            		tasteMap.put(Flavour.BITTER, 0.0);
+            		tasteMap.put(Flavour.SOUR, 0.0);
+            		if ($answer.getAnswerNumber() == 0) {
+						// Bitter
+						tasteMap.put(Flavour.BITTER, tasteMap.get(Flavour.BITTER) + 4.0);
+					} else if ($answer.getAnswerNumber() == 1) {
+						// Sweet
+						tasteMap.put(Flavour.SWEET, tasteMap.get(Flavour.SWEET) + 4.0);
+					};
+            	),
+            result(tasteMap)
+        );
+    then
+    	$preference.setTaste($updatedTasteMap);
+        $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "What kind of sweets do you prefer?");
+        update($user);
+end
+
+
+// What kind of sweets do you prefer?
+
+
+rule "Question: What kind of sweets do you prefer?"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot()));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "What kind of sweets do you prefer?", processed == false) from $answeredQuestions;
         $selectedAnswer: Integer() from accumulate( 
         	Answer($answer: this) from $answeredQuestion.getAnswer(),
         	init(Integer selected = 0;),
             action( 
             		if ($answer.getAnswerNumber() == 0) {
-						// Bitter
-						$preference.getTaste().put(Flavour.BITTER, 5.0);
+						// Candy
+						$preference.getTaste().put(Flavour.SWEET, $preference.getTaste().get(Flavour.SWEET) + 6.0);
+						$preference.getTexture().put(Texture.THICC, 5.0);
 					} else if ($answer.getAnswerNumber() == 1) {
-						// Sweet
-						$preference.getTaste().put(Flavour.SWEET, 5.0);
+						// Ice cream
+						$preference.getTaste().put(Flavour.SWEET, $preference.getTaste().get(Flavour.SWEET) + 5.0);
+						$preference.getTexture().put(Texture.HALF_THICC, 5.0);
+					} else if ($answer.getAnswerNumber() == 2) {
+						// Chocolate
+						$preference.getTaste().put(Flavour.SWEET, $preference.getTaste().get(Flavour.SWEET) + 4.0);
+						$preference.getTexture().put(Texture.THICC, 5.0);
 					};
             	),
             result(selected)
         );
     then
         $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "END");
+        update($user);
+end
+
+// What kind of ingredients do you prefer?
+
+rule "Question: What kind of ingredients do you prefer?"
+    when
+        $user: User();
+        User($preference: preference, eval($preference.getHot() != null), 
+        	eval(!$preference.getHot()), eval($preference.getAlcoholic()));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == "What kind of ingredients do you prefer?", processed == false) from $answeredQuestions;
+        $selectedAnswer: Integer() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+        	init(Integer selected = 0;),
+            action( 
+            		if ($answer.getAnswerNumber() == 0) {
+						// Lemon
+						$preference.getTaste().put(Flavour.SOUR, $preference.getTaste().get(Flavour.SOUR) + 5.0);
+					} else if ($answer.getAnswerNumber() == 1) {
+						// Syrup
+						$preference.getTaste().put(Flavour.SWEET, $preference.getTaste().get(Flavour.SWEET) + 4.0);
+					} else if ($answer.getAnswerNumber() == 2) {
+						// Coconut
+						$preference.getTaste().put(Flavour.SWEET, $preference.getTaste().get(Flavour.SWEET) + 4.0);
+					} else if ($answer.getAnswerNumber() == 3) {
+						// Grapefruit
+						$preference.getTaste().put(Flavour.BITTER, $preference.getTaste().get(Flavour.BITTER) + 4.0);
+						$preference.getTaste().put(Flavour.SWEET, $preference.getTaste().get(Flavour.SWEET) + 3.0);
+					};
+            	),
+            result(selected)
+        );
+    then
+        $answeredQuestion.setProcessed(true);
+        drools.getKnowledgeRuntime().setGlobal("nextQuestion", "END");
         update($user);
 end

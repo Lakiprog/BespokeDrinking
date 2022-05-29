@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Collapse, Nav, Navbar, NavbarToggler, NavItem } from "reactstrap";
+import * as authService from "../Auth/AuthService";
 
 const AdminNavbar = () => {
 	const [collapsed, setCollapsed] = useState(true);
 	const toggleNavbar = () => setCollapsed(!collapsed);
 
-	// const logout = () => {
-	// 	authService.removeToken();
-	// };
+	const logout = () => {
+		authService.removeToken();
+	};
 
 	return (
 		<div className="nav-bar">
@@ -21,7 +22,9 @@ const AdminNavbar = () => {
 							<Link to="/create-question">Create Question</Link>
 						</NavItem>
 						<NavItem>
-							<Link to="/login">Logout</Link>
+							<Link to="/login" onClick={logout}>
+								Logout
+							</Link>
 						</NavItem>
 					</Nav>
 				</Collapse>

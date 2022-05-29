@@ -1,27 +1,25 @@
 import {
 	Button,
-	Card,
-	CardBody,
-	CardTitle,
 	Form,
-	FormFeedback,
 	FormGroup,
-	Input,
 	Label,
+	Input,
+	Card,
+	CardTitle,
+	CardBody,
+	FormFeedback,
 } from "reactstrap";
-import UnauthenticatedNavbar from "../../Navbars/UnauthenticatedNavbar";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { registrationSchema } from "./RegistrationSchema";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { User } from "../../Model/User";
-import { POST_USER } from "../../api-routes";
 import { useForm } from "react-hook-form";
+import "react-toastify/dist/ReactToastify.css";
+import { loginSchema } from "./LoginSchema";
+import * as authService from "./AuthService";
+import UnauthenticatedNavbar from "../Navbars/UnauthenticatedNavbar";
 import { useNavigate } from "react-router-dom";
 
-// toast.configure();
-const Registration = () => {
-	const customId = "registration";
+const Login = () => {
+	const customId = "login";
 
 	const navigate = useNavigate();
 
@@ -30,78 +28,77 @@ const Registration = () => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm({
+		resolver: yupResolver(loginSchema),
 		mode: "onChange",
-		resolver: yupResolver(registrationSchema),
 	});
 
-	const registration = (user: User) => {
+	const login = (user: any) => {
 		axios
-			.post(POST_USER, user)
+			.post("http://localhost:8080/auth/login", user)
 			.then((res: any) => {
-				navigate("/login");
+				authService.storeToken(res.data);
+				if (authService.getRole() === "ROLE_USER") {
+					navigate("/questionnaire");
+				} else if (authService.getRole() === "ROLE_ADMIN") {
+					navigate("/restaurants");
+				}
 			})
-			.catch((err: any) => {});
+			.catch((err: any) => {
+				let message = "";
+				if (err.response.status === 404) {
+					message = "Invalid Credentials!";
+				}
+				// toast.error(message, {
+				// 	position: toast.POSITION.TOP_CENTER,
+				// 	autoClose: false,
+				// 	toastId: customId,
+				// });
+			});
 	};
 
 	return (
-		<>
+		<div>
 			<UnauthenticatedNavbar />
-
 			<Card
 				className="card-login-registracija"
 				style={{ backgroundColor: "#DEEDE6", borderColor: "black" }}
 			>
 				<CardBody>
-					<CardTitle tag="h2">Registration</CardTitle>
+					<CardTitle tag="h2">Login</CardTitle>
 					<Form className="form-login-registracija">
 						<FormGroup>
 							<Label>Username</Label>
 							<Input
 								type="text"
 								name="username"
-								placeholder="Username"
 								invalid={errors.username?.message}
 								innerRef={register}
 							/>
 							<FormFeedback>{errors.username?.message}</FormFeedback>
 						</FormGroup>
-
 						<FormGroup>
 							<Label>Password</Label>
 							<Input
-								type="text"
+								type="password"
 								name="password"
-								placeholder="Password"
 								invalid={errors.password?.message}
 								innerRef={register}
 							/>
 							<FormFeedback>{errors.password?.message}</FormFeedback>
 						</FormGroup>
-
-						<FormGroup>
-							<Label>City</Label>
-							<Input
-								type="text"
-								name="city"
-								placeholder="NS"
-								invalid={errors.city?.message}
-								innerRef={register}
-							/>
-							<FormFeedback>{errors.city?.message}</FormFeedback>
-						</FormGroup>
-
 						<Button
 							className="registruj-login-btn"
 							color="primary"
 							type="button"
-							onClick={handleSubmit(registration)}
+							onClick={handleSubmit(login)}
 						>
-							Register
+							Login
 						</Button>
 					</Form>
 				</CardBody>
 			</Card>
-		</>
+		</div>
 	);
 };
-export default Registration;
+
+export default Login;

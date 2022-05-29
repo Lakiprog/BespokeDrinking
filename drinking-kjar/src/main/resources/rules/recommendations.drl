@@ -19,7 +19,7 @@ query getBestDrinks(Preference $preference, String $city, List $result)
 	$filterAllergies: List(size > 0) from accumulate ( 
     	Drink($drink: this, $ingredients: ingredients) from $filter
     	and
-    	String($ingredients.contains(this)) from $preference.getAllergies(),
+    	String(!$ingredients.contains(this)) from $preference.getAllergies(),
     	collectList($drink)
     );
     $biggestValue: Number() from accumulate (
