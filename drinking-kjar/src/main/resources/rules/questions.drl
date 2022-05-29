@@ -208,7 +208,12 @@ rule "Question: Do you drink coffee or tea more?"
         $coffee: Boolean() from accumulate( 
         	Answer($answer: this) from $answeredQuestion.getAnswer(),
             init( Boolean isCoffee = true; ),
-            action( if ($answer.getAnswerNumber() == 0) {isCoffee = false;}; ),
+            action( 
+            		if ($answer.getAnswerNumber() == 0) {
+            			isCoffee = false;
+            		};
+            		$preference.getTexture().put(Texture.LIQUID, 10.0);
+            	),
             result(isCoffee)
         );
     then
