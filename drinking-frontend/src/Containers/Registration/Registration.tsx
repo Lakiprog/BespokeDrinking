@@ -18,8 +18,8 @@ import { User } from "../../Model/User";
 import { POST_USER } from "../../api-routes";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-// toast.configure();
 const Registration = () => {
 	const customId = "registration";
 
@@ -40,7 +40,13 @@ const Registration = () => {
 			.then((res: any) => {
 				navigate("/login");
 			})
-			.catch((err: any) => {});
+			.catch((err: any) => {
+				toast.error(err.response.data, {
+					position: toast.POSITION.TOP_CENTER,
+					autoClose: false,
+					toastId: customId,
+				});
+			});
 	};
 
 	return (

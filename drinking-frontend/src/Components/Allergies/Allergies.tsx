@@ -30,8 +30,12 @@ const Allergies = (props: { added: Function }) => {
 	};
 
 	const addAllergies = () => {
+		let userAllergies = allergies;
+		if (userAllergies.length === 0) {
+			userAllergies = ["No allergies"];
+		}
 		axios
-			.put(ADD_USER_ALLERGIES + Number(authService.getId()), allergies)
+			.put(ADD_USER_ALLERGIES + Number(authService.getId()), userAllergies)
 			.then((response) => {
 				props.added();
 			})

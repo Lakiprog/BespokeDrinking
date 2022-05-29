@@ -17,7 +17,9 @@ import { loginSchema } from "./LoginSchema";
 import * as authService from "./AuthService";
 import UnauthenticatedNavbar from "../Navbars/UnauthenticatedNavbar";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
+toast.configure();
 const Login = () => {
 	const customId = "login";
 
@@ -48,11 +50,11 @@ const Login = () => {
 				if (err.response.status === 404) {
 					message = "Invalid Credentials!";
 				}
-				// toast.error(message, {
-				// 	position: toast.POSITION.TOP_CENTER,
-				// 	autoClose: false,
-				// 	toastId: customId,
-				// });
+				toast.error(message, {
+					position: toast.POSITION.TOP_CENTER,
+					autoClose: false,
+					toastId: customId,
+				});
 			});
 	};
 

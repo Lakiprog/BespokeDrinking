@@ -16,16 +16,16 @@ import com.bespoke.drinking.service.RestaurantService;
 public class RestaurantServiceImpl  implements RestaurantService{
 
 	@Autowired
-	RestaurantRepository repository;
+	private RestaurantRepository restaurantRepository;
 
 	@Override
 	public List<Restaurant> getAll() {
-		return repository.findAll();
+		return restaurantRepository.findAll();
 	}
 
 	@Override
 	public Restaurant getOne(int id) {
-		Optional<Restaurant> exists =  repository.findById(id);
+		Optional<Restaurant> exists =  restaurantRepository.findById(id);
 		if (!exists.isPresent()) {
 			throw new ResourceNotFoundException("Restaurant with this id does not exist! - " + id);
 		}
@@ -34,7 +34,7 @@ public class RestaurantServiceImpl  implements RestaurantService{
 
 	@Override
 	public Restaurant save(Restaurant restaurant) {
-		return repository.save(restaurant);
+		return restaurantRepository.save(restaurant);
 	}
 
 	@Override
@@ -42,6 +42,6 @@ public class RestaurantServiceImpl  implements RestaurantService{
 		Restaurant restaurant = getOne(id);
 		drink.setRestaurant(restaurant);
 		restaurant.addDrink(drink);
-		repository.save(restaurant);
+		restaurantRepository.save(restaurant);
 	}
 }

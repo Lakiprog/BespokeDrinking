@@ -1,5 +1,6 @@
 package com.bespoke.drinking.service.serviceImpl;
 
+import com.bespoke.drinking.exception.ResourceExistsException;
 import com.bespoke.drinking.exception.ResourceNotFoundException;
 import com.bespoke.drinking.model.Preference;
 import com.bespoke.drinking.model.Role;
@@ -23,7 +24,7 @@ import com.bespoke.drinking.utils.Constants;
 public class UserServiceImpl implements UserService{
 
 	@Autowired
-	UserRepository repository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private PreferenceRepository preferenceRepo;
@@ -36,12 +37,12 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> getAll() {
-		return repository.findAll();
+		return userRepository.findAll();
 	}
 
 	@Override
 	public User getOne(int id) {
-		Optional<User> exists =  repository.findById(id);
+		Optional<User> exists =  userRepository.findById(id);
 		if (!exists.isPresent()) {
 			throw new ResourceNotFoundException("User with this id does not exist! - " + id);
 		}
@@ -50,18 +51,22 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User save(User user) {
+		User exists = userRepository.findByUsername(user.getUsername());
+		if (exists != null) {
+			throw new ResourceExistsException("User with this username already exists! - " + user.getUsername());
+		}
 		List<Role> roles = new ArrayList<Role>();
 		Role role =  roleRepository.findByName(Constants.ROLE_USER);
 		roles.add(role);
 		user.setRoles(roles);
 		user.setEnabled(true);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return repository.save(user);
+		return userRepository.save(user);
 	}
 
 	@Override
 	public void addAllergies(int id, List<String> allergies) {
-		Optional<User> exists = repository.findById(id);
+		Optional<User> exists = userRepository.findById(id);
 		if(!exists.isPresent()) {
 			throw new ResourceNotFoundException("User with this id does not exist! - " + id);
 		}
@@ -71,6 +76,6 @@ public class UserServiceImpl implements UserService{
 		p.setAllergies(allergies);
 		p = preferenceRepo.save(p);
 		user.setPreference(p);
-		repository.save(user);
+		userRepository.save(user);
 	}
 }
