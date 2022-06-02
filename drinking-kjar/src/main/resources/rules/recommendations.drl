@@ -1,10 +1,12 @@
 package rules;
 
 import com.bespoke.drinking.model.*;
+import com.bespoke.drinking.dto.*;
 
 import java.util.*;
 
 global List bestDrinks;
+global Integer bestRestaurant;
 
 query getBestDrinks(Preference $preference, String $city, List $result)
 	$drinks: List();
@@ -38,6 +40,27 @@ query getBestDrinks(Preference $preference, String $city, List $result)
 	);
 end
 
+query getBestRestaurant(BestDrinksDTO $drinks, Number $finalRestaurant)
+	$restaurantMap: Map() from accumulate ( 
+		Drink($d: this) from $drinks.getDrinks(),
+    	init(
+    		Map<Integer, Integer> restaurantIds = new HashMap<Integer, Integer>();
+    	),
+        action(
+        	if (restaurantIds.get($d.getRestaurant().getId()) == null) {
+        		restaurantIds.put($d.getRestaurant().getId(), 1);
+        	} else {
+        		restaurantIds.put($d.getRestaurant().getId(), restaurantIds.get($d.getRestaurant().getId()) + 1);
+        	};
+        ),
+        result(restaurantIds)
+	);
+	$finalRestaurant:= Number() from accumulate (
+    	$elem: Number() from $restaurantMap.values(),
+    	max($elem)
+    );
+end
+
 rule "Best Drinks"
 	when
 		$p: Preference();
@@ -46,4 +69,11 @@ rule "Best Drinks"
     then
     	drools.getKnowledgeRuntime().setGlobal("bestDrinks", $result);
 end
-    	
+
+rule "Best Restaurant"
+	when
+		$drinks: BestDrinksDTO();
+        getBestRestaurant($drinks, $finalRestaurant;);
+    then
+    	drools.getKnowledgeRuntime().setGlobal("bestRestaurant", $finalRestaurant.intValue());
+end

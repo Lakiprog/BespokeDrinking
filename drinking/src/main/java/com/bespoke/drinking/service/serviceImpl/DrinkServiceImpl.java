@@ -12,6 +12,7 @@ import com.bespoke.drinking.exception.ResourceNotFoundException;
 import com.bespoke.drinking.model.Drink;
 import com.bespoke.drinking.model.User;
 import com.bespoke.drinking.repository.DrinkRepository;
+import com.bespoke.drinking.repository.RestaurantRepository;
 import com.bespoke.drinking.repository.UserRepository;
 import com.bespoke.drinking.service.DrinkService;
 
@@ -26,6 +27,9 @@ public class DrinkServiceImpl implements DrinkService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private RestaurantRepository restaurantRepository;
 
 	@Override
 	public List<Drink> getAll() {
@@ -53,6 +57,7 @@ public class DrinkServiceImpl implements DrinkService {
 		kieSession.insert(user.getPreference());
 		kieSession.insert(user.getCity());
 		kieSession.insert(repository.findAll());
+		kieSession.insert(restaurantRepository.findAll());
 		kieSession.fireAllRules();
 		List<Drink> bestDrinks = (List<Drink>) kieSession.getGlobal("bestDrinks");
 		return bestDrinks;

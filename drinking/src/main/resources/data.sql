@@ -1,14 +1,26 @@
 insert into restaurant (name, city) values ('Restoran 1', 'NS');
+insert into restaurant (name, city) values ('Restoran 2', 'BG');
 
 
 insert into drink (name, alcoholic, hot, caffeine, texture, restaurant_id) values ('Zajecarsko pivo', true, false, false, 0, 1);
 insert into drink (name, alcoholic, hot, caffeine, texture, restaurant_id) values ('Gin tonic with lemon', true, false, false, 0, 1);
+
+insert into drink (name, alcoholic, hot, caffeine, texture, restaurant_id) values ('Zajecarsko pivo', true, false, false, 0, 2);
+insert into drink (name, alcoholic, hot, caffeine, texture, restaurant_id) values ('Gin tonic with lemon', true, false, false, 0, 2);
+
 insert into drink_ingredients (drink_id, ingredient) values (1, 'Voda');
 insert into drink_ingredients (drink_id, ingredient) values (1, 'JECMENI slad');
 insert into drink_ingredients (drink_id, ingredient) values (1, 'Hmelj');
 insert into drink_ingredients (drink_id, ingredient) values (2, 'Gin');
 insert into drink_ingredients (drink_id, ingredient) values (2, 'Tonic water');
 insert into drink_ingredients (drink_id, ingredient) values (2, 'Lemon');
+
+insert into drink_ingredients (drink_id, ingredient) values (3, 'Voda');
+insert into drink_ingredients (drink_id, ingredient) values (3, 'JECMENI slad');
+insert into drink_ingredients (drink_id, ingredient) values (3, 'Hmelj');
+insert into drink_ingredients (drink_id, ingredient) values (4, 'Gin');
+insert into drink_ingredients (drink_id, ingredient) values (4, 'Tonic water');
+insert into drink_ingredients (drink_id, ingredient) values (4, 'Lemon');
 
 
 insert into drink_tastes (drink_id, taste, value) values (1, 0, 0.0);
@@ -21,6 +33,17 @@ insert into drink_tastes (drink_id, taste, value) values (2, 1, 0.0);
 insert into drink_tastes (drink_id, taste, value) values (2, 2, 0.0);
 insert into drink_tastes (drink_id, taste, value) values (2, 3, 3.0);
 insert into drink_tastes (drink_id, taste, value) values (2, 4, 9.0);
+
+insert into drink_tastes (drink_id, taste, value) values (3, 0, 0.0);
+insert into drink_tastes (drink_id, taste, value) values (3, 1, 0.0);
+insert into drink_tastes (drink_id, taste, value) values (3, 2, 0.0);
+insert into drink_tastes (drink_id, taste, value) values (3, 3, 5.0);
+insert into drink_tastes (drink_id, taste, value) values (3, 4, 6.0);
+insert into drink_tastes (drink_id, taste, value) values (4, 0, 0.0);
+insert into drink_tastes (drink_id, taste, value) values (4, 1, 0.0);
+insert into drink_tastes (drink_id, taste, value) values (4, 2, 0.0);
+insert into drink_tastes (drink_id, taste, value) values (4, 3, 3.0);
+insert into drink_tastes (drink_id, taste, value) values (4, 4, 9.0);
 
 
 insert into user (username, password, city, enabled) values ('markuza', '$2a$12$2OxIYBGYFdOFi6S96DNAGuZ.Rat9OigGXEjaN938snNryfdaefRba', 'NS', true);

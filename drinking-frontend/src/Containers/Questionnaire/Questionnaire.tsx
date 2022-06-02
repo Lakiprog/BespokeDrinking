@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import { Question } from "../../Model/Question";
 import { User } from "../../Model/User";
 import axios from "axios";
-import { GET_ONE_USER, GET_BEST_DRINKS, HAS_FILLED_USER } from "../../api-routes";
+import {
+	GET_ONE_USER,
+	GET_BEST_DRINKS,
+	HAS_FILLED_USER,
+	GET_BEST_RESTAURANT,
+} from "../../api-routes";
 import Allergies from "../../Components/Allergies/Allergies";
 import QuestionComponent from "../../Components/QuestionComponent/QuestionComponent";
 import { Answer } from "../../Model/Answer";
@@ -11,6 +16,7 @@ import UserNavbar from "../../Navbars/UserNavbar";
 import * as authService from "../../Auth/AuthService";
 import { Drink } from "../../Model/Drink";
 import DrinksTable from "../../Components/DrinksTable/DrinskTable";
+import { Restaurant } from "../../Model/Restaurant";
 
 // toast.configure();
 const Questionnaire = () => {
@@ -20,7 +26,8 @@ const Questionnaire = () => {
 	//TODO smisliti neki pametniji nacin za saznavanje dal je allergie dodao
 	const [filledAllergies, setFilledAllergies] = useState(false);
 	const [filled, setFilled] = useState(false);
-	const [drinks, setDrinks] = useState<Drink[] | null >(null);
+	const [drinks, setDrinks] = useState<Drink[] | null>(null);
+	const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
 
 	useEffect(() => {
 		getUser();
@@ -38,12 +45,12 @@ const Questionnaire = () => {
 
 	const getFilled = () => {
 		axios
-		.get(HAS_FILLED_USER + Number(authService.getId()))
-		.then((response) => {
-			setFilled(response.data);
-			getBestDrinks();
-		})
-		.catch((err) => {});
+			.get(HAS_FILLED_USER + Number(authService.getId()))
+			.then((response) => {
+				setFilled(response.data);
+				getBestDrinks();
+			})
+			.catch((err) => {});
 	};
 
 	const getBestDrinks = () => {
@@ -51,10 +58,25 @@ const Questionnaire = () => {
 			.get(GET_BEST_DRINKS + Number(authService.getId()))
 			.then((response) => {
 				console.log(response.data);
-				if(!response.data){
+				if (!response.data) {
 					setDrinks([]);
-				}else {
-                    setDrinks(response.data);
+				} else {
+					setDrinks(response.data);
+					getBestRestaurant(response.data);
+				}
+			})
+			.catch((err) => {});
+	};
+
+	const getBestRestaurant = (drinks: Array<Drink>) => {
+		axios
+			.post(GET_BEST_RESTAURANT, { drinks: drinks })
+			.then((response) => {
+				console.log(response.data);
+				if (!response.data) {
+					setRestaurant(null);
+				} else {
+					setRestaurant(response.data);
 				}
 			})
 			.catch((err) => {});
@@ -64,8 +86,8 @@ const Questionnaire = () => {
 		if (question.text === "END") {
 			getBestDrinks();
 			setQuestion(null);
-		}else{
-            setQuestion(question);
+		} else {
+			setQuestion(question);
 		}
 	};
 
@@ -101,17 +123,15 @@ const Questionnaire = () => {
 				</div>
 			)}
 
-			{filledAllergies &&  question  && !filled && (
+			{filledAllergies && question && !filled && (
 				<div>
 					<QuestionComponent question={question} nextQuestion={nextQuestion} />
 				</div>
 			)}
 
-			{
-				drinks && filled && (
-					<DrinksTable drinks={drinks}/>
-				)
-			}
+			{drinks && restaurant && filled && (
+				<DrinksTable drinks={drinks} restaurant={restaurant} />
+			)}
 		</div>
 	);
 };

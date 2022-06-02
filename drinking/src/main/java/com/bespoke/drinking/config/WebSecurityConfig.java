@@ -66,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			// restaurant
 			.antMatchers(HttpMethod.POST, "/restaurant").hasAuthority(Constants.ROLE_ADMIN)
 			.antMatchers(HttpMethod.PUT, "/restaurant/{id}").hasAuthority(Constants.ROLE_ADMIN)
+			.antMatchers("/restaurant/getBestRestaurant").hasAuthority(Constants.ROLE_USER)
 			
 			 // user
 			.antMatchers(HttpMethod.POST, "/user").permitAll()

@@ -16,6 +16,7 @@ export const GET_ALL_RESTAURANTS = restaurants;
 export const GET_ONE_RESTAURANT = restaurants + "/";
 export const POST_RESTAURANT = restaurants;
 export const ADD_DRINK_TO_RESTAURANT = restaurants + "/";
+export const GET_BEST_RESTAURANT = restaurants + "/getBestRestaurant";
 
 //questions
 export const ANSWER_QUESTION = questions + "/addAnsweredQuestion/";
