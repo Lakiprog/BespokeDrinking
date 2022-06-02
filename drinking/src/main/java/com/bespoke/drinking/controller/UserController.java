@@ -34,6 +34,11 @@ public class UserController {
 		return service.getOne(id);
 	}
 	
+	@GetMapping(value = "/hasFilled/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Boolean hasFilled(@PathVariable("id") int id){
+		return service.hasFilled(id);
+	}
+	
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public User save(@RequestBody User user) {
 		return service.save(user);

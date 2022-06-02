@@ -2,6 +2,7 @@ package com.bespoke.drinking.service.serviceImpl;
 
 import com.bespoke.drinking.exception.ResourceExistsException;
 import com.bespoke.drinking.exception.ResourceNotFoundException;
+import com.bespoke.drinking.model.AnsweredQuestion;
 import com.bespoke.drinking.model.Preference;
 import com.bespoke.drinking.model.Role;
 import com.bespoke.drinking.model.User;
@@ -77,5 +78,22 @@ public class UserServiceImpl implements UserService{
 		p = preferenceRepo.save(p);
 		user.setPreference(p);
 		userRepository.save(user);
+	}
+
+	@Override
+	public Boolean hasFilled(int id) {
+		Optional<User> exists =  userRepository.findById(id);
+		if (!exists.isPresent()) {
+			throw new ResourceNotFoundException("User with this id does not exist! - " + id);
+		}
+		User user = exists.get();
+		
+		for (AnsweredQuestion question : user.getAnsweredQuestions()) {
+			if(question.getQuestion().getText().equals("What kind of ingredients do you prefer?") && question.isProcessed()) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

@@ -14,13 +14,13 @@ const UserNavbar = () => {
 	return (
 		<div className="nav-bar">
 			<Navbar color="dark" light expand="md">
-				<Link to="/questionnaire">Questionaire</Link>
+				<Link to="/questionnaire">Questionnaire</Link>
 				<NavbarToggler onClick={toggleNavbar} className="mr-2" />
 				<Collapse isOpen={!collapsed} navbar>
 					<Nav navbar>
-						<NavItem>
+						{/* <NavItem>
 							<Link to="/recommendations">Recommendations</Link>
-						</NavItem>
+						</NavItem> */}
 						<NavItem>
 							<Link to="/login" onClick={logout}>
 								Logout

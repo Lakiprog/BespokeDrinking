@@ -7,6 +7,7 @@ const drinks = api + "drink";
 //user
 export const GET_ALL_USERS = users;
 export const GET_ONE_USER = users + "/";
+export const HAS_FILLED_USER = users + "/hasFilled/";
 export const POST_USER = users;
 export const ADD_USER_ALLERGIES = users + "/";
 

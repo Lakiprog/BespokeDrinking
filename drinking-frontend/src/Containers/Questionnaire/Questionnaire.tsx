@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { Question } from "../../Model/Question";
 import { User } from "../../Model/User";
 import axios from "axios";
-import { GET_ONE_USER, GET_BEST_DRINKS } from "../../api-routes";
+import { GET_ONE_USER, GET_BEST_DRINKS, HAS_FILLED_USER } from "../../api-routes";
 import Allergies from "../../Components/Allergies/Allergies";
 import QuestionComponent from "../../Components/QuestionComponent/QuestionComponent";
 import { Answer } from "../../Model/Answer";
 import UserNavbar from "../../Navbars/UserNavbar";
 import * as authService from "../../Auth/AuthService";
+import { Drink } from "../../Model/Drink";
+import DrinksTable from "../../Components/DrinksTable/DrinskTable";
 
 // toast.configure();
 const Questionnaire = () => {
@@ -17,9 +19,12 @@ const Questionnaire = () => {
 	const [user, setUser] = useState<User | null>(null);
 	//TODO smisliti neki pametniji nacin za saznavanje dal je allergie dodao
 	const [filledAllergies, setFilledAllergies] = useState(false);
+	const [filled, setFilled] = useState(false);
+	const [drinks, setDrinks] = useState<Drink[] | null >(null);
 
 	useEffect(() => {
 		getUser();
+		getFilled();
 	}, []);
 
 	const getUser = () => {
@@ -31,11 +36,26 @@ const Questionnaire = () => {
 			.catch((err) => {});
 	};
 
+	const getFilled = () => {
+		axios
+		.get(HAS_FILLED_USER + Number(authService.getId()))
+		.then((response) => {
+			setFilled(response.data);
+			getBestDrinks();
+		})
+		.catch((err) => {});
+	};
+
 	const getBestDrinks = () => {
 		axios
 			.get(GET_BEST_DRINKS + Number(authService.getId()))
 			.then((response) => {
 				console.log(response.data);
+				if(!response.data){
+					setDrinks([]);
+				}else {
+                    setDrinks(response.data);
+				}
 			})
 			.catch((err) => {});
 	};
@@ -43,8 +63,10 @@ const Questionnaire = () => {
 	const nextQuestion = (question: Question) => {
 		if (question.text === "END") {
 			getBestDrinks();
+			setQuestion(null);
+		}else{
+            setQuestion(question);
 		}
-		setQuestion(question);
 	};
 
 	const added = () => {
@@ -73,17 +95,23 @@ const Questionnaire = () => {
 		<div>
 			<UserNavbar />
 
-			{!filledAllergies && (
+			{!filledAllergies && !filled && (
 				<div>
 					<Allergies added={added} />
 				</div>
 			)}
 
-			{filledAllergies && (
+			{filledAllergies &&  question  && !filled && (
 				<div>
 					<QuestionComponent question={question} nextQuestion={nextQuestion} />
 				</div>
 			)}
+
+			{
+				drinks && filled && (
+					<DrinksTable drinks={drinks}/>
+				)
+			}
 		</div>
 	);
 };

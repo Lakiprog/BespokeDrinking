@@ -10,6 +10,8 @@ public interface UserService {
 	
 	User getOne(int id);
 	
+	Boolean hasFilled(int id);
+	
 	User save(User user);
 	
 	void addAllergies(int id, List<String> allergies);
