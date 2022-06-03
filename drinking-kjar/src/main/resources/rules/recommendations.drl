@@ -7,6 +7,8 @@ import java.util.*;
 
 global List bestDrinks;
 global Integer bestRestaurant;
+global List searchAndFilterDrinksResult;
+global List searchAndFilterRestaurantsResult;
 
 query getBestDrinks(Preference $preference, String $city, List $result)
 	$drinks: List();
@@ -61,6 +63,44 @@ query getBestRestaurant(BestDrinksDTO $drinks, Number $finalRestaurant)
     );
 end
 
+query searchAndFilterDrinks(List $drinks, SearchFilterDrinksDTO $searchFilterDTO, List $searchAndFilter)
+	$search: List() from accumulate ( 
+    	Drink
+    	(
+    		$drink: this,
+    		($drink.getName().matches("(?i).*?" + $searchFilterDTO.getName() + ".*?") || $searchFilterDTO.getName().equals("")) && 
+    		($drink.getRestaurant().getName().matches("(?i).*?" + $searchFilterDTO.getRestaurant() + ".*?") || $searchFilterDTO.getRestaurant().equals("")) &&
+    		($drink.getIngredients().contains($searchFilterDTO.getIngredient().toLowerCase()) || $searchFilterDTO.getIngredient().equals(""))
+    	)
+    	from $drinks,
+    	collectList($drink)
+    );
+    $searchAndFilter:= List() from accumulate (
+    	Drink
+    	(
+    		$d: this,
+    		($d.getAlcoholic() == $searchFilterDTO.getAlcoholic() || $searchFilterDTO.getAlcoholic() == null) &&
+    		($d.getCaffeine() == $searchFilterDTO.getCaffeine() || $searchFilterDTO.getCaffeine() == null) &&
+    		($d.getHot() == $searchFilterDTO.getHot() || $searchFilterDTO.getHot() == null)
+    	)
+    	from $search,
+    	collectList($d)
+    ); 
+end
+
+query searchAndFilterRestaurants(List $restaurants, SearchFilterRestaurantsDTO $searchFilterDTO, List $result)
+	$result:= List() from accumulate (
+    	Restaurant
+    	(
+    		$r: this,
+    		($r.getName().matches("(?i).*?" + $searchFilterDTO.getName() + ".*?") || $searchFilterDTO.getName().equals("")) &&
+    		($r.getCity().matches("(?i).*?" + $searchFilterDTO.getCity() + ".*?") || $searchFilterDTO.getCity().equals(""))
+    	)
+    	from $restaurants,
+    	collectList($r)
+    );
+end
+
 rule "Best Drinks"
 	when
 		$p: Preference();
@@ -77,3 +117,24 @@ rule "Best Restaurant"
     then
     	drools.getKnowledgeRuntime().setGlobal("bestRestaurant", $finalRestaurant.intValue());
 end
+
+rule "Search and filter drinks"
+	agenda-group "search-filter-drinks"
+	when
+		$drinks: List();
+		$searchFilterDTO: SearchFilterDrinksDTO();
+		searchAndFilterDrinks($drinks, $searchFilterDTO, $searchAndFilter;);
+	then
+		drools.getKnowledgeRuntime().setGlobal("searchAndFilterDrinksResult", $searchAndFilter);
+end
+
+rule "Search and filter restaurants"
+	agenda-group "search-filter-restaurants"
+	when
+		$restaurants: List();
+		$searchFilterDTO: SearchFilterRestaurantsDTO();
+		searchAndFilterRestaurants($restaurants, $searchFilterDTO, $result;);
+	then
+		drools.getKnowledgeRuntime().setGlobal("searchAndFilterRestaurantsResult", $result);
+end
+ 

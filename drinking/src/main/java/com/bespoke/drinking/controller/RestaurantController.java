@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bespoke.drinking.dto.BestDrinksDTO;
+import com.bespoke.drinking.dto.SearchFilterRestaurantsDTO;
 import com.bespoke.drinking.model.Drink;
 import com.bespoke.drinking.model.Restaurant;
 import com.bespoke.drinking.service.RestaurantService;
@@ -28,6 +29,7 @@ public class RestaurantController {
 	RestaurantService service;
 	
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public List<Restaurant> getAll(){
 		return service.getAll();
 	}
@@ -54,5 +56,12 @@ public class RestaurantController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	public ResponseEntity<Restaurant> getBestRestaurant(@RequestBody BestDrinksDTO drinks) {
 		return new ResponseEntity<Restaurant>(service.getBestRestaurant(drinks), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/searchAndFilter", consumes = MediaType.APPLICATION_JSON_VALUE, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+	public ResponseEntity<List<Restaurant>> searchAndFilter(@RequestBody SearchFilterRestaurantsDTO searchFilterRestaurantsDTO) {
+		return new ResponseEntity<List<Restaurant>>(service.searchAndFilter(searchFilterRestaurantsDTO), HttpStatus.OK);
 	}
 }

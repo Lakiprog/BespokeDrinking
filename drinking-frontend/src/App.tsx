@@ -15,17 +15,17 @@ function App() {
 			<Router>
 				<Fragment>
 					<Routes>
-						<Route path="/" element={<Registration />} />
-						<Route path="/login" element={<Login />} />
+						<Route path="/" element={<Login />} />
+						<Route path="/registration" element={<Registration />} />
 						<Route
 							path="/restaurants"
-							element={<ProtectedRoute roles={["ROLE_ADMIN"]} />}
+							element={<ProtectedRoute roles={["ROLE_ADMIN", "ROLE_USER"]} />}
 						>
 							<Route path="/restaurants" element={<Restaurants />} />
 						</Route>
 						<Route
 							path="/drinks"
-							element={<ProtectedRoute roles={["ROLE_ADMIN"]} />}
+							element={<ProtectedRoute roles={["ROLE_ADMIN", "ROLE_USER"]} />}
 						>
 							<Route path="/drinks" element={<Drinks />} />
 						</Route>

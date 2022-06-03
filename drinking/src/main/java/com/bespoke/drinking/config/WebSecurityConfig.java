@@ -58,15 +58,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/auth/login").permitAll()
 			
 			// drink
+			.antMatchers(HttpMethod.GET, "/drink").hasAnyAuthority(Constants.ROLE_ADMIN, Constants.ROLE_USER)
 			.antMatchers("/drink/getBestDrinks/{userId}").hasAuthority(Constants.ROLE_USER)
+			.antMatchers("/drink/searchAndFilter").hasAnyAuthority(Constants.ROLE_ADMIN, Constants.ROLE_USER)
 			
 			// question
 			.antMatchers("/question/addAnsweredQuestion/{userId}").hasAuthority(Constants.ROLE_USER)
 			
 			// restaurant
+			.antMatchers(HttpMethod.GET, "/restaurant").hasAnyAuthority(Constants.ROLE_ADMIN, Constants.ROLE_USER)
 			.antMatchers(HttpMethod.POST, "/restaurant").hasAuthority(Constants.ROLE_ADMIN)
 			.antMatchers(HttpMethod.PUT, "/restaurant/{id}").hasAuthority(Constants.ROLE_ADMIN)
 			.antMatchers("/restaurant/getBestRestaurant").hasAuthority(Constants.ROLE_USER)
+			.antMatchers("/restaurant/searchAndFilter").hasAnyAuthority(Constants.ROLE_ADMIN, Constants.ROLE_USER)
 			
 			 // user
 			.antMatchers(HttpMethod.POST, "/user").permitAll()

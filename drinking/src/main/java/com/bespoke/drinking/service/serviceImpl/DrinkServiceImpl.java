@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bespoke.drinking.dto.DrinkDTO;
+import com.bespoke.drinking.dto.SearchFilterDrinksDTO;
 import com.bespoke.drinking.exception.ResourceNotFoundException;
 import com.bespoke.drinking.model.Drink;
 import com.bespoke.drinking.model.User;
@@ -55,7 +56,7 @@ public class DrinkServiceImpl implements DrinkService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DrinkDTO> getBestDrinks(Integer userId) {
+	public List<Drink> getBestDrinks(Integer userId) {
 		Optional<User> exists = userRepository.findById(userId);
 		if (!exists.isPresent()) {
 			throw new ResourceNotFoundException("User with this id does not exist! - " + userId);
@@ -68,11 +69,24 @@ public class DrinkServiceImpl implements DrinkService {
 		kieSession.insert(restaurantRepository.findAll());
 		kieSession.fireAllRules();
 		List<Drink> bestDrinks = (List<Drink>) kieSession.getGlobal("bestDrinks");
-		ArrayList<DrinkDTO> dtos = new ArrayList<>();
-		
-		for (Drink drink : bestDrinks) {
-			dtos.add(new DrinkDTO(drink));
+		return bestDrinks;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DrinkDTO> searchAndFilter(SearchFilterDrinksDTO searchAndFilterDto) {
+		KieSession kieSession = kieContainer.newKieSession("questions");
+		kieSession.getAgenda().getAgendaGroup("search-filter-drinks").setFocus();
+		List<Drink> drinks = repository.findAll();
+		drinks.forEach(e -> e.getIngredients().replaceAll(String::toLowerCase));
+		kieSession.insert(drinks);
+		kieSession.insert(searchAndFilterDto);
+		kieSession.fireAllRules();
+		List<Drink> searchAndFilterDrinksResult = (List<Drink>) kieSession.getGlobal("searchAndFilterDrinksResult");
+		List<DrinkDTO> finalDrinks = new ArrayList<DrinkDTO>();
+		for (Drink d : searchAndFilterDrinksResult) {
+			finalDrinks.add(new DrinkDTO(d));
 		}
-		return dtos;
+		return finalDrinks;
 	}
 }

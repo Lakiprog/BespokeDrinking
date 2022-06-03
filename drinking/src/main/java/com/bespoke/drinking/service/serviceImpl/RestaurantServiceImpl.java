@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bespoke.drinking.dto.BestDrinksDTO;
+import com.bespoke.drinking.dto.SearchFilterRestaurantsDTO;
 import com.bespoke.drinking.exception.ResourceNotFoundException;
 import com.bespoke.drinking.model.Drink;
 import com.bespoke.drinking.model.Restaurant;
@@ -62,5 +63,18 @@ public class RestaurantServiceImpl  implements RestaurantService{
 			throw new ResourceNotFoundException("Restaurant with this id does not exist! - " + bestRestaurant);
 		}
 		return exists.get();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Restaurant> searchAndFilter(SearchFilterRestaurantsDTO searchFilterRestaurantsDTO) {
+		KieSession kieSession = kieContainer.newKieSession("questions");
+		kieSession.getAgenda().getAgendaGroup("search-filter-restaurants").setFocus();
+		List<Restaurant> restaurants = restaurantRepository.findAll();
+		kieSession.insert(restaurants);
+		kieSession.insert(searchFilterRestaurantsDTO);
+		kieSession.fireAllRules();
+		List<Restaurant> searchAndFilterRestaurantsResult = (List<Restaurant>) kieSession.getGlobal("searchAndFilterRestaurantsResult");
+		return searchAndFilterRestaurantsResult;
 	}
 }

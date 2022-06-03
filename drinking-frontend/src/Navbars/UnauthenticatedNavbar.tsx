@@ -9,12 +9,12 @@ const UnauthenticatedNavbar = () => {
 	return (
 		<div className="nav-bar">
 			<Navbar color="dark" light expand="md">
-				<Link to="/">Registration</Link>
+				<Link to="/registration">Registration</Link>
 				<NavbarToggler onClick={toggleNavbar} className="mr-2" />
 				<Collapse isOpen={!collapsed} navbar>
 					<Nav navbar>
 						<NavItem>
-							<Link to="/login">Login</Link>
+							<Link to="/">Login</Link>
 						</NavItem>
 					</Nav>
 				</Collapse>

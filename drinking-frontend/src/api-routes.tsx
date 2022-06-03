@@ -17,6 +17,7 @@ export const GET_ONE_RESTAURANT = restaurants + "/";
 export const POST_RESTAURANT = restaurants;
 export const ADD_DRINK_TO_RESTAURANT = restaurants + "/";
 export const GET_BEST_RESTAURANT = restaurants + "/getBestRestaurant";
+export const SEARCH_FILTER_RESTAURANTS = restaurants + "/searchAndFilter";
 
 //questions
 export const ANSWER_QUESTION = questions + "/addAnsweredQuestion/";
@@ -24,3 +25,4 @@ export const ANSWER_QUESTION = questions + "/addAnsweredQuestion/";
 // drinks
 export const GET_BEST_DRINKS = drinks + "/getBestDrinks/";
 export const GET_ALL_DRINKS = drinks;
+export const SEARCH_FILTER_DRINKS = drinks + "/searchAndFilter";

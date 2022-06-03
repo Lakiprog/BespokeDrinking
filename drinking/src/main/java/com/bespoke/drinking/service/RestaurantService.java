@@ -3,6 +3,7 @@ package com.bespoke.drinking.service;
 import java.util.List;
 
 import com.bespoke.drinking.dto.BestDrinksDTO;
+import com.bespoke.drinking.dto.SearchFilterRestaurantsDTO;
 import com.bespoke.drinking.model.Drink;
 import com.bespoke.drinking.model.Restaurant;
 
@@ -17,4 +18,6 @@ public interface RestaurantService {
 	void addDrink(int id, Drink drink);
 	
 	Restaurant getBestRestaurant(BestDrinksDTO drinks);
+	
+	List<Restaurant> searchAndFilter(SearchFilterRestaurantsDTO searchFilterRestaurantsDTO);
 }

@@ -1,38 +1,18 @@
-import {
-	Button,
-	Card,
-	CardBody,
-	CardTitle,
-	Form,
-	FormFeedback,
-	FormGroup,
-	Input,
-	Label,
-	Modal,
-	ModalBody,
-	ModalHeader,
-	Table,
-} from "reactstrap";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-toastify";
+import { Card, CardBody, Table } from "reactstrap";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { GET_ALL_DRINKS, GET_ALL_RESTAURANTS, POST_RESTAURANT } from "../../api-routes";
-import { useForm } from "react-hook-form";
-import { Restaurant } from "../../Model/Restaurant";
+import { GET_ALL_DRINKS, SEARCH_FILTER_DRINKS } from "../../api-routes";
 import { useEffect, useState } from "react";
-import AddDrinkModal from "../../Components/AddDrinkModal/AddDrinkModal";
 import AdminNavbar from "../../Navbars/AdminNavbar";
-import FilterRestaurants from "../../Components/FilterRestaurants/FilterRestaurants";
 import { DrinkDTO } from "../../Model/DrinkDTO";
 import FilterDrinks from "../../Components/FilterDrinks/FilterDrinks";
+import * as authService from "../../Auth/AuthService";
+import UserNavbar from "../../Navbars/UserNavbar";
 
 // toast.configure();
 const Drinks = () => {
 	const customId = "drinks";
-	const [drinks, setDrinks] = useState<Array<DrinkDTO> | null>(
-		null
-	);
+	const [drinks, setDrinks] = useState<Array<DrinkDTO> | null>(null);
 
 	useEffect(() => {
 		getDrinks();
@@ -47,17 +27,37 @@ const Drinks = () => {
 			.catch((err: any) => {});
 	};
 
-	//TODO pozvati endpoint i setovati restorane
-	const filterDrinks = (name :string, restaurant: string, ingredient: string, 
-		alcohol: boolean | null, coffein: boolean | null, hot: boolean | null) => {
-
-	}
+	const filterDrinks = (
+		name: string,
+		restaurant: string,
+		ingredient: string,
+		alcoholic: boolean | null,
+		caffeine: boolean | null,
+		hot: boolean | null
+	) => {
+		let body = {
+			name: name,
+			restaurant: restaurant,
+			ingredient: ingredient,
+			alcoholic: alcoholic,
+			caffeine: caffeine,
+			hot: hot,
+		};
+		console.log(body);
+		axios
+			.post(SEARCH_FILTER_DRINKS, body)
+			.then((res: any) => {
+				console.log(res.data);
+				setDrinks(res.data);
+			})
+			.catch((err: any) => {});
+	};
 
 	return (
 		<div>
-			<AdminNavbar />
-
-			<FilterDrinks filter={filterDrinks}/>
+			{authService.getRole() === "ROLE_ADMIN" && <AdminNavbar />}
+			{authService.getRole() === "ROLE_USER" && <UserNavbar />}
+			<FilterDrinks filter={filterDrinks} />
 
 			<Card
 				className="card-login-registracija"
@@ -87,7 +87,6 @@ const Drinks = () => {
 					</Table>
 				</CardBody>
 			</Card>
-
 		</div>
 	);
 };

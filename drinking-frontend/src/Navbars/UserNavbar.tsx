@@ -22,7 +22,13 @@ const UserNavbar = () => {
 							<Link to="/recommendations">Recommendations</Link>
 						</NavItem> */}
 						<NavItem>
-							<Link to="/login" onClick={logout}>
+							<Link to="/drinks">Drinks</Link>
+						</NavItem>
+						<NavItem>
+							<Link to="/restaurants">Restaurants</Link>
+						</NavItem>
+						<NavItem>
+							<Link to="/" onClick={logout}>
 								Logout
 							</Link>
 						</NavItem>

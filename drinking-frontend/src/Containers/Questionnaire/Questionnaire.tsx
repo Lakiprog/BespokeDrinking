@@ -14,7 +14,6 @@ import QuestionComponent from "../../Components/QuestionComponent/QuestionCompon
 import { Answer } from "../../Model/Answer";
 import UserNavbar from "../../Navbars/UserNavbar";
 import * as authService from "../../Auth/AuthService";
-import { Drink } from "../../Model/Drink";
 import DrinksTable from "../../Components/DrinksTable/DrinskTable";
 import { Restaurant } from "../../Model/Restaurant";
 import { DrinkDTO } from "../../Model/DrinkDTO";
@@ -71,7 +70,7 @@ const Questionnaire = () => {
 
 	const getBestRestaurant = (drinks: Array<DrinkDTO>) => {
 		axios
-			.post(GET_BEST_RESTAURANT, { drinks: drinks.map(drink => drink.drink) })
+			.post(GET_BEST_RESTAURANT, { drinks: drinks.map((drink) => drink.drink) })
 			.then((response) => {
 				console.log(response.data);
 				if (!response.data) {
