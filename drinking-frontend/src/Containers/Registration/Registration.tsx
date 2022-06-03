@@ -38,7 +38,7 @@ const Registration = () => {
 		axios
 			.post(POST_USER, user)
 			.then((res: any) => {
-				navigate("/login");
+				navigate("/");
 			})
 			.catch((err: any) => {
 				toast.error(err.response.data, {

@@ -74,6 +74,7 @@ const Restaurants = () => {
 		axios
 			.post(SEARCH_FILTER_RESTAURANTS, body)
 			.then((res: any) => {
+				console.log(res.data);
 				setRestaurants(res.data);
 			})
 			.catch((err: any) => {});

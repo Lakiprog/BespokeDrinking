@@ -60,7 +60,7 @@ const Drinks = () => {
 			<FilterDrinks filter={filterDrinks} />
 
 			<Card
-				className="card-login-registracija"
+				className="card-pica"
 				style={{ backgroundColor: "#DEEDE6", borderColor: "black" }}
 			>
 				<CardBody>
@@ -68,6 +68,9 @@ const Drinks = () => {
 						<thead>
 							<tr>
 								<th>Name</th>
+								<th>Alcoholic</th>
+								<th>Hot</th>
+								<th>Caffeine</th>
 								<th>Restaurant</th>
 								<th>City</th>
 							</tr>
@@ -78,6 +81,9 @@ const Drinks = () => {
 								return (
 									<tr key={drink.id}>
 										<td>{drink.name}</td>
+										<td>{drink.drink.alcoholic ? 'YES' : 'NO'}</td>
+										<td>{drink.drink.hot ? 'YES' : 'NO'}</td>
+										<td>{drink.drink.caffeine ? 'YES' : 'NO'}</td>
 										<td>{drink.restaurant}</td>
 										<td>{drink.city}</td>
 									</tr>

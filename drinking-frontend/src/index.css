@@ -25,6 +25,19 @@ code {
 	border-collapse: collapse;
 }
 
+.card-pica {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: black;
+	margin-bottom: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 100px;
+	padding: 1em;
+	text-align: left;
+	max-width: 800px;
+	border-collapse: collapse;
+}
+
 .form-login-registracija {
 	padding: 1em;
 	border-collapse: collapse;

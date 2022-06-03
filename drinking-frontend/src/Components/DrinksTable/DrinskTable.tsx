@@ -14,7 +14,7 @@ const DrinksTable = (props: {
 	return (
 		<div>
 			<Card
-				className="card-login-registracija"
+				className="card-pica"
 				style={{ backgroundColor: "#DEEDE6", borderColor: "black" }}
 			>
 				<CardBody>
@@ -25,9 +25,12 @@ const DrinksTable = (props: {
 							<Table bordered className="div-dokumenti">
 								<thead>
 									<tr>
-										<th>Name</th>
-										<th>Restaurant</th>
-										<th>City</th>
+									<th>Name</th>
+									<th>Alcoholic</th>
+									<th>Hot</th>
+									<th>Caffeine</th>
+									<th>Restaurant</th>
+									<th>City</th>
 									</tr>
 								</thead>
 
@@ -36,6 +39,9 @@ const DrinksTable = (props: {
 										return (
 											<tr key={drink.id}>
 												<td>{drink.name}</td>
+												<td>{drink.drink.alcoholic ? 'YES' : 'NO'}</td>
+												<td>{drink.drink.hot ? 'YES' : 'NO'}</td>
+												<td>{drink.drink.caffeine ? 'YES' : 'NO'}</td>
 												<td>{drink.restaurant}</td>
 												<td>{drink.city}</td>
 											</tr>
