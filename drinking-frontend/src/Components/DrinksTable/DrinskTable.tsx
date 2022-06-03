@@ -2,10 +2,11 @@ import { Card, CardBody, CardTitle, Label, Table } from "reactstrap";
 import "react-toastify/dist/ReactToastify.css";
 import { Drink } from "../../Model/Drink";
 import { Restaurant } from "../../Model/Restaurant";
+import { DrinkDTO } from "../../Model/DrinkDTO";
 
 // toast.configure();
 const DrinksTable = (props: {
-	drinks: Drink[];
+	drinks: DrinkDTO[];
 	restaurant: Restaurant | null;
 }) => {
 	const customId = "drinksTable";
@@ -20,27 +21,31 @@ const DrinksTable = (props: {
 					<CardTitle tag="h2">Recommendations</CardTitle>
 
 					{props.drinks.length > 0 && (
-						<Table bordered className="div-dokumenti">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Restarant name</th>
-									<th>City</th>
-								</tr>
-							</thead>
+						<>
+							<Table bordered className="div-dokumenti">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Restaurant</th>
+										<th>City</th>
+									</tr>
+								</thead>
 
-							<tbody>
-								{props.drinks.map((drink) => {
-									return (
-										<tr key={drink.id}>
-											<td>{drink.name}</td>
-											<td>{props.restaurant && props.restaurant.name}</td>
-											<td>{props.restaurant && props.restaurant.city}</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</Table>
+								<tbody>
+									{props.drinks.map((drink) => {
+										return (
+											<tr key={drink.id}>
+												<td>{drink.name}</td>
+												<td>{drink.restaurant}</td>
+												<td>{drink.city}</td>
+											</tr>
+										);
+									})}
+								</tbody>
+							</Table>
+
+							<Label>The restaurant that is the best fit for you is {props.restaurant?.name} which is located in {props.restaurant?.city}</Label>
+						</>
 					)}
 
 					{props.drinks.length === 0 && (

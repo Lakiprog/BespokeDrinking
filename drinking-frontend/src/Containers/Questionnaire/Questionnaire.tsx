@@ -17,6 +17,7 @@ import * as authService from "../../Auth/AuthService";
 import { Drink } from "../../Model/Drink";
 import DrinksTable from "../../Components/DrinksTable/DrinskTable";
 import { Restaurant } from "../../Model/Restaurant";
+import { DrinkDTO } from "../../Model/DrinkDTO";
 
 // toast.configure();
 const Questionnaire = () => {
@@ -26,7 +27,7 @@ const Questionnaire = () => {
 	//TODO smisliti neki pametniji nacin za saznavanje dal je allergie dodao
 	const [filledAllergies, setFilledAllergies] = useState(false);
 	const [filled, setFilled] = useState(false);
-	const [drinks, setDrinks] = useState<Drink[] | null>(null);
+	const [drinks, setDrinks] = useState<DrinkDTO[] | null>(null);
 	const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
 
 	useEffect(() => {
@@ -68,9 +69,9 @@ const Questionnaire = () => {
 			.catch((err) => {});
 	};
 
-	const getBestRestaurant = (drinks: Array<Drink>) => {
+	const getBestRestaurant = (drinks: Array<DrinkDTO>) => {
 		axios
-			.post(GET_BEST_RESTAURANT, { drinks: drinks })
+			.post(GET_BEST_RESTAURANT, { drinks: drinks.map(drink => drink.drink) })
 			.then((response) => {
 				console.log(response.data);
 				if (!response.data) {
@@ -129,7 +130,7 @@ const Questionnaire = () => {
 				</div>
 			)}
 
-			{drinks && restaurant && filled && (
+			{drinks && filled && (
 				<DrinksTable drinks={drinks} restaurant={restaurant} />
 			)}
 		</div>
