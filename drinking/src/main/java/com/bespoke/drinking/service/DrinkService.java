@@ -7,7 +7,7 @@ import com.bespoke.drinking.model.Drink;
 
 public interface DrinkService {
 
-	List<Drink> getAll();
+	List<DrinkDTO> getAll();
 	
 	Drink getOne(int id);
 	

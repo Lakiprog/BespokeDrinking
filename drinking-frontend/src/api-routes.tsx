@@ -23,3 +23,4 @@ export const ANSWER_QUESTION = questions + "/addAnsweredQuestion/";
 
 // drinks
 export const GET_BEST_DRINKS = drinks + "/getBestDrinks/";
+export const GET_ALL_DRINKS = drinks;

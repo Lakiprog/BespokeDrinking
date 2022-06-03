@@ -24,6 +24,7 @@ import { Restaurant } from "../../Model/Restaurant";
 import { useEffect, useState } from "react";
 import AddDrinkModal from "../../Components/AddDrinkModal/AddDrinkModal";
 import AdminNavbar from "../../Navbars/AdminNavbar";
+import FilterRestaurants from "../../Components/FilterRestaurants/FilterRestaurants";
 
 // toast.configure();
 const Restaurants = () => {
@@ -58,6 +59,11 @@ const Restaurants = () => {
 			})
 			.catch((err: any) => {});
 	};
+
+	//TODO pozvati endpoint i setovati restorane
+	const filterRestaurants = (name: string, city: string, drinkName: string) => {
+
+	}
 
 	const addRestaurant = (restaurant: Restaurant) => {
 		axios
@@ -119,6 +125,8 @@ const Restaurants = () => {
 					</Form>
 				</CardBody>
 			</Card>
+
+			<FilterRestaurants filter={filterRestaurants}/>
 
 			<Card
 				className="card-login-registracija"

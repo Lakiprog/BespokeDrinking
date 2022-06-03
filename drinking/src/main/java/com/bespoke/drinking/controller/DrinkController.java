@@ -30,7 +30,7 @@ public class DrinkController {
 	}
 	
 	@GetMapping(value = "")
-	public List<Drink> getAll() {
+	public List<DrinkDTO> getAll() {
 		return service.getAll();
 	}
 	

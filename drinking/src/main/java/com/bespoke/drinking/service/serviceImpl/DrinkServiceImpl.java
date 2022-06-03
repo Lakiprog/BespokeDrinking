@@ -34,8 +34,14 @@ public class DrinkServiceImpl implements DrinkService {
 	private RestaurantRepository restaurantRepository;
 
 	@Override
-	public List<Drink> getAll() {
-		return repository.findAll();
+	public List<DrinkDTO> getAll() {
+		List<Drink> drinks =  repository.findAll();
+		ArrayList<DrinkDTO> dtos = new ArrayList<>();
+		
+		for (Drink drink : drinks) {
+			dtos.add(new DrinkDTO(drink));
+		}
+		return dtos;
 	}
 
 	@Override

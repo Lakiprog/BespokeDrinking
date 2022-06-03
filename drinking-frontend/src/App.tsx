@@ -7,6 +7,7 @@ import Restaurants from "./Containers/Restaurants/Restaurants";
 import Questionnaire from "./Containers/Questionnaire/Questionnaire";
 import Login from "./Auth/Login";
 import ProtectedRoute from "./Auth/ProtectedRoute";
+import Drinks from "./Containers/Drinks/Drinks";
 
 function App() {
 	return (
@@ -21,6 +22,12 @@ function App() {
 							element={<ProtectedRoute roles={["ROLE_ADMIN"]} />}
 						>
 							<Route path="/restaurants" element={<Restaurants />} />
+						</Route>
+						<Route
+							path="/drinks"
+							element={<ProtectedRoute roles={["ROLE_ADMIN"]} />}
+						>
+							<Route path="/drinks" element={<Drinks />} />
 						</Route>
 						<Route
 							path="/questionnaire"
