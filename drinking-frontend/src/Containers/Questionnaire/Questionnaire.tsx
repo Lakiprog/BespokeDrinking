@@ -47,6 +47,7 @@ const Questionnaire = () => {
 		axios
 			.get(HAS_FILLED_USER + Number(authService.getId()))
 			.then((response) => {
+				console.log(response.data);
 				setFilled(response.data);
 				getBestDrinks();
 			})
@@ -58,8 +59,8 @@ const Questionnaire = () => {
 			.get(GET_BEST_DRINKS + Number(authService.getId()))
 			.then((response) => {
 				console.log(response.data);
-				if (!response.data) {
-					setDrinks([]);
+				if (!response.data || response.data.length === 0) {
+					setDrinks(null);
 				} else {
 					setDrinks(response.data);
 					getBestRestaurant(response.data);
@@ -84,7 +85,7 @@ const Questionnaire = () => {
 
 	const nextQuestion = (question: Question) => {
 		if (question.text === "END") {
-			getBestDrinks();
+			getFilled();
 			setQuestion(null);
 		} else {
 			setQuestion(question);

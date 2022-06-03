@@ -12,7 +12,7 @@ public interface DrinkService {
 	
 	Drink getOne(int id);
 	
-	List<Drink> getBestDrinks(Integer userId);
+	List<DrinkDTO> getBestDrinks(Integer userId);
 	
 	List<DrinkDTO> searchAndFilter(SearchFilterDrinksDTO searchAndFilterDto);
 }

@@ -56,7 +56,7 @@ public class DrinkServiceImpl implements DrinkService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Drink> getBestDrinks(Integer userId) {
+	public List<DrinkDTO> getBestDrinks(Integer userId) {
 		Optional<User> exists = userRepository.findById(userId);
 		if (!exists.isPresent()) {
 			throw new ResourceNotFoundException("User with this id does not exist! - " + userId);
@@ -69,7 +69,13 @@ public class DrinkServiceImpl implements DrinkService {
 		kieSession.insert(restaurantRepository.findAll());
 		kieSession.fireAllRules();
 		List<Drink> bestDrinks = (List<Drink>) kieSession.getGlobal("bestDrinks");
-		return bestDrinks;
+		List<DrinkDTO> finalDrinks = new ArrayList<DrinkDTO>();
+		if (bestDrinks != null) {
+			for (Drink d : bestDrinks) {
+				finalDrinks.add(new DrinkDTO(d));
+			} 
+		}
+		return finalDrinks;
 	}
 
 	@SuppressWarnings("unchecked")

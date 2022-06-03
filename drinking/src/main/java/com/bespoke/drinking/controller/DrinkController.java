@@ -28,8 +28,8 @@ public class DrinkController {
 	
 	@GetMapping(value = "/getBestDrinks/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public ResponseEntity<List<Drink>> getBestDrinks(@PathVariable Integer userId) {
-		return new ResponseEntity<List<Drink>>(service.getBestDrinks(userId), HttpStatus.OK);
+	public ResponseEntity<List<DrinkDTO>> getBestDrinks(@PathVariable Integer userId) {
+		return new ResponseEntity<List<DrinkDTO>>(service.getBestDrinks(userId), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "")
