@@ -55,17 +55,17 @@ insert into role (name) values ('ROLE_USER');
 insert into user_role (user_id, role_id) values (1, 1);
 insert into user_role (user_id, role_id) values (2, 2);
 
-insert into question (text) values ('Are you 18?');
-insert into question (text) values ('Do you like alcoholic drinks?');
-insert into question (text) values ('Do you like drinks with caffeine?');
-insert into question (text) values ('Do you like hot or cold drinks?');
-insert into question (text) values ('What cold drink do you prefer?');
-insert into question (text) values ('What alcoholic drink do you prefer?');
-insert into question (text) values ('Do you drink coffee or tea more?');
-insert into question (text) values ('How do you drink your coffee?');
-insert into question (text) values ('How do you drink your tea?');
-insert into question (text) values ('What kind of sweets do you prefer?');
-insert into question (text) values ('What kind of ingredients do you prefer?');
+insert into question (text, created) values ('Are you 18?', false);
+insert into question (text, created) values ('Do you like alcoholic drinks?', false);
+insert into question (text, created) values ('Do you like drinks with caffeine?', false);
+insert into question (text, created) values ('Do you like hot or cold drinks?', false);
+insert into question (text, created) values ('What cold drink do you prefer?', false);
+insert into question (text, created) values ('What alcoholic drink do you prefer?', false);
+insert into question (text, created) values ('Do you drink coffee or tea more?', false);
+insert into question (text, created) values ('How do you drink your coffee?', false);
+insert into question (text, created) values ('How do you drink your tea?', false);
+insert into question (text, created) values ('What kind of sweets do you prefer?', false);
+insert into question (text, created) values ('What kind of ingredients do you prefer?', false);
 
 insert into answer (text, answer_number) values ('Below 18', 0);
 insert into answer (text, answer_number) values ('Above 18', 1);

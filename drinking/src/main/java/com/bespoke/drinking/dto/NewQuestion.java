@@ -6,9 +6,13 @@ public class NewQuestion {
 
 	private String text;
 	
+	private String firstAnswerText;
+	
 	private Flavour firstAnswerKey;
 	
 	private Double firstAnswerValue;
+	
+	private String secondAnswerText;
 	
 	private Flavour secondAnswerKey;
 	
@@ -54,6 +58,22 @@ public class NewQuestion {
 		this.secondAnswerValue = secondAnswerValue;
 	}
 	
+	public String getFirstAnswerText() {
+		return firstAnswerText;
+	}
+
+	public void setFirstAnswerText(String firstAnswerText) {
+		this.firstAnswerText = firstAnswerText;
+	}
+
+	public String getSecondAnswerText() {
+		return secondAnswerText;
+	}
+
+	public void setSecondAnswerText(String secondAnswerText) {
+		this.secondAnswerText = secondAnswerText;
+	}
+
 	public void addQuotesToText() {
 		this.text =  "\"" + this.text + "\"";
 	}

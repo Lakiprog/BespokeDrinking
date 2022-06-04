@@ -27,6 +27,9 @@ public class Question {
     @CollectionTable(name="question_answers", joinColumns=@JoinColumn(name="question_id"))
 	private List<Answer> answers;
 	
+	@Column
+	private Boolean created;
+	
 	public Question() {}
 	
 	public Question(String text) {
@@ -55,6 +58,14 @@ public class Question {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Boolean getCreated() {
+		return created;
+	}
+
+	public void setCreated(Boolean created) {
+		this.created = created;
 	}
 
 	@Override

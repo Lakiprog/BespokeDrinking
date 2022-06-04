@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.bespoke.drinking.dto.NewQuestion;
 import com.bespoke.drinking.exception.ResourceNotFoundException;
@@ -78,8 +79,7 @@ public class QuestionServiceImpl implements QuestionService {
 		if (nextQuestionText.equals("END")) {
 			return new Question(nextQuestionText);
 		}
-		Question next = questionRepository.findByText(nextQuestionText);
-		return next;
+		return questionRepository.findByText(nextQuestionText);
 	}
 
 	@Override
@@ -92,11 +92,10 @@ public class QuestionServiceImpl implements QuestionService {
 		ObjectDataCompiler converter = new ObjectDataCompiler();
 		String drl = converter.compile(data, template);
 		System.out.println(drl);
+		
 		KieHelper kieHelper = new KieHelper();
 		kieHelper.addContent(drl, ResourceType.DRL);
-		
 		Results results = kieHelper.verify();
-		
 		if (results.hasMessages(Message.Level.WARNING, Message.Level.ERROR)) {
 			List<Message> messages = results.getMessages(Message.Level.WARNING, Message.Level.ERROR);
 			for (Message m : messages) {
@@ -107,11 +106,11 @@ public class QuestionServiceImpl implements QuestionService {
 		
 		Answer a1 = new Answer();
 		a1.setAnswerNumber(0);
-		a1.setText("No");
+		a1.setText(newQuestion.getFirstAnswerText());
 		
 		Answer a2 = new Answer();
 		a2.setAnswerNumber(1);
-		a2.setText("Yes");
+		a2.setText(newQuestion.getSecondAnswerText());
 		
 		a1 = answerRepository.save(a1);
 		a2 = answerRepository.save(a2);
@@ -123,11 +122,32 @@ public class QuestionServiceImpl implements QuestionService {
 		Question question = new Question();
 		question.setText(newQuestion.getText());
 		question.setAnswers(answers);
-		
+		question.setCreated(true);		
 		questionRepository.save(question);
 		
 		FileWriter myWriter = new FileWriter("../drinking-kjar/src/main/resources/rules/" + System.currentTimeMillis() + ".drl");
         myWriter.write(drl);
         myWriter.close();
+	}
+
+	@Override
+	public List<Question> getUnansweredCreatedQuestions(Integer userId) {
+		Optional<User> exists =  userRepository.findById(userId);
+		if (!exists.isPresent()) {
+			throw new ResourceNotFoundException("User with this id does not exist! - " + userId);
+		}
+		List<Question> createdUnansweredQuestions = new ArrayList<>();
+		User currentUser = exists.get();
+		List<Question> answeredQuestions = currentUser.getAnsweredQuestions()
+				.stream()
+				.map(q-> q.getQuestion())
+				.collect(Collectors.toList());
+		List<Question> createdQuestions = questionRepository.getCreatedQuestions();
+		for (Question created: createdQuestions) {
+			if (!answeredQuestions.contains(created)) {
+				createdUnansweredQuestions.add(created);
+			}
+		}
+		return createdUnansweredQuestions;
 	}
 }
