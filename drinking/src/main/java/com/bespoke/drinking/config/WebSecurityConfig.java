@@ -64,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			
 			// question
 			.antMatchers("/question/addAnsweredQuestion/{userId}").hasAuthority(Constants.ROLE_USER)
+			.antMatchers("/question/createNewQuestion").hasAuthority(Constants.ROLE_ADMIN)
 			
 			// restaurant
 			.antMatchers(HttpMethod.GET, "/restaurant").hasAnyAuthority(Constants.ROLE_ADMIN, Constants.ROLE_USER)

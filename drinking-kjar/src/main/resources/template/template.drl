@@ -1,0 +1,42 @@
+template header
+
+text	
+firstAnswerKey
+firstAnswerValue
+secondAnswerKey
+secondAnswerValue
+
+package rules;
+
+import com.bespoke.drinking.model.*;
+import com.bespoke.drinking.dto.*;
+import java.util.*;
+
+
+template "Create question"
+
+rule "question_@{row.rowNumber}"
+	when
+    	$user: User();
+        User($preference: preference, eval(!$preference.getTaste().isEmpty()));
+        User($answeredQuestions: answeredQuestions);
+        $answeredQuestion: AnsweredQuestion(question.getText() == @{text}, processed == false) from $answeredQuestions;
+    	$updatedTasteMap: Map() from accumulate( 
+        	Answer($answer: this) from $answeredQuestion.getAnswer(),
+        	init(Map<Flavour, Double> tasteMap = $preference.getTaste();),
+            action(
+            		if ($answer.getAnswerNumber() == 0) {
+            			tasteMap.put(Flavour.@{firstAnswerKey}, tasteMap.get(Flavour.@{firstAnswerKey}) + @{firstAnswerValue});
+            		} else {
+            			tasteMap.put(Flavour.@{secondAnswerKey}, tasteMap.get(Flavour.@{secondAnswerKey}) + @{secondAnswerValue});
+            		};
+            ),
+            result(tasteMap)
+        );
+	then
+		$preference.setTaste($updatedTasteMap);
+        $answeredQuestion.setProcessed(true);
+    	update($user);
+end
+
+end template

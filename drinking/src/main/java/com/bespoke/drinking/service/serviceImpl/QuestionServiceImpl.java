@@ -1,17 +1,32 @@
 package com.bespoke.drinking.service.serviceImpl;
 
+import org.drools.template.ObjectDataCompiler;
+import org.kie.api.builder.Message;
+import org.kie.api.builder.Results;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.utils.KieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import com.bespoke.drinking.dto.NewQuestion;
 import com.bespoke.drinking.exception.ResourceNotFoundException;
+import com.bespoke.drinking.model.Answer;
 import com.bespoke.drinking.model.AnsweredQuestion;
 import com.bespoke.drinking.model.Preference;
 import com.bespoke.drinking.model.Question;
 import com.bespoke.drinking.model.User;
+import com.bespoke.drinking.repository.AnswerRepository;
 import com.bespoke.drinking.repository.AnsweredQuestionRepository;
 import com.bespoke.drinking.repository.PreferenceRepository;
 import com.bespoke.drinking.repository.QuestionRepository;
@@ -29,6 +44,9 @@ public class QuestionServiceImpl implements QuestionService {
 	
 	@Autowired
 	private PreferenceRepository preferenceRepository;
+	
+	@Autowired
+	private AnswerRepository answerRepository;
 	
 	@Autowired
 	private QuestionRepository questionRepository;
@@ -62,5 +80,54 @@ public class QuestionServiceImpl implements QuestionService {
 		}
 		Question next = questionRepository.findByText(nextQuestionText);
 		return next;
+	}
+
+	@Override
+	public void createNewQuestion(NewQuestion newQuestion) throws IOException {
+		newQuestion.addQuotesToText();
+		File initialFile = new File("../drinking-kjar/src/main/resources/template/template.drl");
+	    InputStream template = new FileInputStream(initialFile);
+		List<NewQuestion> data = new ArrayList<>();
+		data.add(newQuestion);
+		ObjectDataCompiler converter = new ObjectDataCompiler();
+		String drl = converter.compile(data, template);
+		System.out.println(drl);
+		KieHelper kieHelper = new KieHelper();
+		kieHelper.addContent(drl, ResourceType.DRL);
+		
+		Results results = kieHelper.verify();
+		
+		if (results.hasMessages(Message.Level.WARNING, Message.Level.ERROR)) {
+			List<Message> messages = results.getMessages(Message.Level.WARNING, Message.Level.ERROR);
+			for (Message m : messages) {
+				System.out.println("Error: " + m.getText());
+			}
+			throw new IllegalStateException("Compilation error were found!");
+		}
+		
+		Answer a1 = new Answer();
+		a1.setAnswerNumber(0);
+		a1.setText("No");
+		
+		Answer a2 = new Answer();
+		a2.setAnswerNumber(1);
+		a2.setText("Yes");
+		
+		a1 = answerRepository.save(a1);
+		a2 = answerRepository.save(a2);
+		
+		List<Answer> answers = new ArrayList<>();
+		answers.add(a1);
+		answers.add(a2);
+		
+		Question question = new Question();
+		question.setText(newQuestion.getText());
+		question.setAnswers(answers);
+		
+		questionRepository.save(question);
+		
+		FileWriter myWriter = new FileWriter("../drinking-kjar/src/main/resources/rules/" + System.currentTimeMillis() + ".drl");
+        myWriter.write(drl);
+        myWriter.close();
 	}
 }
