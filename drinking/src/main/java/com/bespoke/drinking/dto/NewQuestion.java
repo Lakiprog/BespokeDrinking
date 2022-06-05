@@ -18,6 +18,8 @@ public class NewQuestion {
 	
 	private Double secondAnswerValue;
 	
+	private String ruleName;
+	
 	public String getText() {
 		return text;
 	}
@@ -72,6 +74,14 @@ public class NewQuestion {
 
 	public void setSecondAnswerText(String secondAnswerText) {
 		this.secondAnswerText = secondAnswerText;
+	}
+	
+	public String getRuleName() {
+		return ruleName;
+	}
+
+	public void setRuleName() {
+		this.ruleName = this.text;
 	}
 
 	public void addQuotesToText() {

@@ -8,6 +8,8 @@ import Questionnaire from "./Containers/Questionnaire/Questionnaire";
 import Login from "./Auth/Login";
 import ProtectedRoute from "./Auth/ProtectedRoute";
 import Drinks from "./Containers/Drinks/Drinks";
+import UpdatePreference from "./Containers/UpdatePreference/UpdatePreference";
+import CreateQuestion from "./Containers/CreateQuestion/CreateQuestion";
 
 function App() {
 	return (
@@ -34,6 +36,21 @@ function App() {
 							element={<ProtectedRoute roles={["ROLE_USER"]} />}
 						>
 							<Route path="/questionnaire" element={<Questionnaire />} />
+						</Route>
+						<Route
+							path="/additionalQuestions"
+							element={<ProtectedRoute roles={["ROLE_USER"]} />}
+						>
+							<Route
+								path="/additionalQuestions"
+								element={<UpdatePreference />}
+							/>
+						</Route>
+						<Route
+							path="/createQuestion"
+							element={<ProtectedRoute roles={["ROLE_ADMIN"]} />}
+						>
+							<Route path="/createQuestion" element={<CreateQuestion />} />
 						</Route>
 						{/* <Route path="/create-question" element={<QuestionCreation/>} />
             <Route path="/recommendations" element={<Recommendations/>} /> */}

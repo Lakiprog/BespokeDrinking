@@ -84,6 +84,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public void createNewQuestion(NewQuestion newQuestion) throws IOException {
+		newQuestion.setRuleName();
 		newQuestion.addQuotesToText();
 		File initialFile = new File("../drinking-kjar/src/main/resources/template/template.drl");
 	    InputStream template = new FileInputStream(initialFile);

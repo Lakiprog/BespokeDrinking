@@ -89,7 +89,12 @@ public class UserServiceImpl implements UserService{
 		User user = exists.get();
 		
 		for (AnsweredQuestion question : user.getAnsweredQuestions()) {
-			if(question.getQuestion().getText().equals("What kind of ingredients do you prefer?") && question.isProcessed()) {
+			if (
+					(
+					question.getQuestion().getText().equals("What kind of ingredients do you prefer?") || 
+					question.getQuestion().getText().equals("What kind of sweets do you prefer?")
+					) 
+					&& question.isProcessed()) {
 				return true;
 			}
 		}

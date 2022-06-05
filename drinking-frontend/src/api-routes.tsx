@@ -21,6 +21,9 @@ export const SEARCH_FILTER_RESTAURANTS = restaurants + "/searchAndFilter";
 
 //questions
 export const ANSWER_QUESTION = questions + "/addAnsweredQuestion/";
+export const CREATE_NEW_QUESTION = questions + "/createNewQuestion";
+export const GET_CREATED_UNANSWERED_QUESTIONS =
+	questions + "/getUnansweredCreatedQuestions/";
 
 // drinks
 export const GET_BEST_DRINKS = drinks + "/getBestDrinks/";

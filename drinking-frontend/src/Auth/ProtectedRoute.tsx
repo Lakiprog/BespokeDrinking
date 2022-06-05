@@ -8,7 +8,7 @@ const ProtectedRoute = ({ roles }: any) => {
 	return roles.includes(currentUserRole) && accessToken ? (
 		<Outlet />
 	) : (
-		<Navigate to="/login" />
+		<Navigate to="/" />
 	);
 };
 

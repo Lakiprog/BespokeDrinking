@@ -28,6 +28,9 @@ const UserNavbar = () => {
 							<Link to="/restaurants">Restaurants</Link>
 						</NavItem>
 						<NavItem>
+							<Link to="/additionalQuestions">Additional questions</Link>
+						</NavItem>
+						<NavItem>
 							<Link to="/" onClick={logout}>
 								Logout
 							</Link>

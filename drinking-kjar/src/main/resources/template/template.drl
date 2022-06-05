@@ -1,5 +1,6 @@
 template header
 
+ruleName
 text	
 firstAnswerKey
 firstAnswerValue
@@ -15,7 +16,7 @@ import java.util.*;
 
 template "Create question"
 
-rule "question_@{row.rowNumber}"
+rule "question_@{ruleName}"
 	when
     	$user: User();
         User($preference: preference, eval(!$preference.getTaste().isEmpty()));

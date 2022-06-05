@@ -22,7 +22,7 @@ const AdminNavbar = () => {
 							<Link to="/drinks">Drinks</Link>
 						</NavItem>
 						<NavItem>
-							<Link to="/create-question">Create Question</Link>
+							<Link to="/createQuestion">Create Question</Link>
 						</NavItem>
 						<NavItem>
 							<Link to="/" onClick={logout}>
