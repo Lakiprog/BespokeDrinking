@@ -120,7 +120,8 @@ public class QuestionServiceImpl implements QuestionService {
 		answers.add(a2);
 		
 		Question question = new Question();
-		question.setText(newQuestion.getText());
+		String text = newQuestion.getText().replace("\"", "");
+		question.setText(text);
 		question.setAnswers(answers);
 		question.setCreated(true);		
 		questionRepository.save(question);
