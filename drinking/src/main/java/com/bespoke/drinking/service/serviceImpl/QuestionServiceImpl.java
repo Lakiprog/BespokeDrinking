@@ -76,7 +76,7 @@ public class QuestionServiceImpl implements QuestionService {
 		kieSession.fireAllRules();
 		String nextQuestionText = (String) kieSession.getGlobal("nextQuestion");
 		userRepository.save(user);
-		if (nextQuestionText.equals("END")) {
+		if (nextQuestionText != null && nextQuestionText.equals("END")) {
 			return new Question(nextQuestionText);
 		}
 		return questionRepository.findByText(nextQuestionText);
